@@ -30,10 +30,12 @@
                     //echo 'Error Occurred<br />';
                     //echo mysqli_error();
                     $dbc->rollback();
-                    $query =("update invertedindex set matches = ISNULL(matches, '') + '-' + $filename where word = '12'");
+                    
+                    $query =("update invertedindex set matches = matches + $filename where word = $word");
                              $response = mysqli_query($dbc, $query);
-                             if($response){
-
+                             if(!$response){
+                                 echo 'Error Occurred<br />';
+                                 echo mysqli_error();
                              }
                     
                 }
