@@ -2,6 +2,7 @@
     
     function buildInvertedIndex($filenames)
     {
+        include 'connect.php';
         $invertedIndex = [];
         
         foreach($filenames as $filename)
@@ -37,11 +38,11 @@ $invertedIndex = buildInvertedIndex(['file1.txt','file2.txt']);
         $matches = lookupWord($invertedIndex, $word);
         if($matches !== false)
         {
-            echo "Found the word \"$word\" in the following files: " . implode(', ', $matches) . "\n";
+            echo "<p>Found the word \"$word\" in the following files: " . implode(', ', $matches) . "</p>";
         }
         else
         {
-            echo "Unable to find the word \"$word\" in the index\n";
+            echo "<p>Unable to find the word \"$word\" in the index</p>";
         }
     }
 ?>
