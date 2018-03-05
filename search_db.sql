@@ -28,8 +28,8 @@ CREATE TABLE `documents` (
   `R_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`R_id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
-  UNIQUE KEY `R_id_UNIQUE` (`R_id`)
+  UNIQUE KEY `R_id_UNIQUE` (`R_id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `invertedindex`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invertedindex` (
   `word` varchar(15) NOT NULL,
-  `matches` varchar(45) DEFAULT NULL,
+  `matches` varchar(999) DEFAULT NULL,
   PRIMARY KEY (`word`),
   UNIQUE KEY `word_UNIQUE` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -86,6 +86,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('admin','admin');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -98,4 +99,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-05 21:41:31
+-- Dump completed on 2018-03-06  0:19:50
