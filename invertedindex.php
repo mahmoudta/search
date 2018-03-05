@@ -30,8 +30,7 @@
                     //echo 'Error Occurred<br />';
                     //echo mysqli_error();
                     $dbc->rollback();
-                    
-                    $query =("update invertedindex set matches = matches + $filename where word = $word");
+                    $query =("update invertedindex set matches = concat(matches,concat('|', $filename)) where word = $word");
                              $response = mysqli_query($dbc, $query);
                              if(!$response){
                                  echo 'Error Occurred<br />';
