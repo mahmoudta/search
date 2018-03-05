@@ -27,15 +27,21 @@
                    // echo 'added with succses';
                     
                 }else{
-                    //echo 'Error Occurred<br />';
-                    //echo mysqli_error();
                     $dbc->rollback();
-                    $query =("update invertedindex set matches = concat(matches,concat('|', $filename)) where word = $word");
-                             $response = mysqli_query($dbc, $query);
-                             if(!$response){
-                                 echo 'Error Occurred<br />';
-                                 echo mysqli_error();
-                             }
+                    
+                    $stmt = $dbc->prepare("update invertedindex set matches = concat(matches,concat('|', ?)) where word = ?");
+                    $stmt->bind_param("ss", $filename, $word);
+                    $stmt->execute();
+                    $affected_rows =mysqli_stmt_affected_rows($stmt);
+                    if($affected_rows == 1){
+                        $dbc->commit();
+                        // echo 'added with succses';
+                        
+                    }else{
+                        
+                        echo 'Error Occurred<br />';
+                        echo mysqli_error();
+                    }
                     
                 }
                 if(!array_key_exists($word, $invertedIndex)) $invertedIndex[$word] = [];
@@ -43,6 +49,6 @@
             }
         }
     }
-    buildInvertedIndex(['file1.txt','file2.txt']);
+    buildInvertedIndex(['ho.txt','fo.txt']);
 
 ?>
