@@ -1,0 +1,103 @@
+header{
+  background-color: #222;
+  border-color: #080808;
+  display: block;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+nav{
+  display: block;
+}
+.brand{
+  color: #9d9d9d;
+  font-size: 18px;
+  line-height: 20px;
+  float:left;
+  width: 17%;
+  padding: 15px;
+}
+.brand:hover, .user>button:hover {
+  color: #fff;
+}
+.form{
+  float: left;
+  margin-left: 15px;
+  margin-top: 10px;
+  display: inline-block;
+  width: 60%;
+}
+.form button{
+  display: inline-block;
+  float: left;
+  padding: 6px 12px;
+font-size: 16px;
+line-height: 1.42857143;
+margin: 0;
+border-top-left-radius: 0;
+border-bottom-left-radius: 0;
+border: 0;
+width: 15%;
+}
+.form-inputs{
+  display: block;
+}
+.form-inputs::after{
+  clear: both;
+  display: table;
+  content: " "
+}
+nav::after{
+  clear: both;
+  display: table;
+  content: " "
+}
+.form-control{
+  border: none;
+  border-radius: 0;
+  display: inline-block;
+  float: left;
+  border: 0;
+  width: 85%
+}
+.user {
+    padding: 15px;
+    position: absolute;
+    right: 0;
+    bottom: 15px;
+}
+.user>button{
+  color: #9d9d9d;
+  font-size: 16px;
+  background-color: transparent;
+  border: none;
+}
+.advanced-search{
+  position: relative;
+  margin-top: 10px;
+  padding-left: 18%;
+}
+.advanced-search>button{
+  background: transparent;
+  color: #fff;
+  text-decoration: underline;
+  border: none;
+  padding: 2px;
+}
+.advanced-search>button:hover{
+  color: #9d9d9d;
+}
+.sign-in {
+    position: absolute;
+    right: 0;
+    width: 300px;
+    top: 100%;
+    background: #222;
+    padding: 10px;
+    padding-left: 15px;
+    color: #fff;
+    display: none;
+}
+button:focus{
+  outline: none;
+}
