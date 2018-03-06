@@ -11,10 +11,21 @@ function getfiles(){
 $dir = getcwd().'/Source'.'/';
 echo $dir."\n";
 $files = scandir($dir);
+$size =count($files);
+echo '<br/>';
 print_r($files);
-//echo $files;
+$cleanarray = [];
+foreach ($files as $key => $value) {
+  if($value !="." && $value != ".." && $value != ".DS_Store"){
+    $cleanarray[] = $value;
+  }
 }
- ?>
+
+echo '<br/>';
+print_r($cleanarray);
+
+}
+?>
 
 <!DOCTYPE html>
 <html>
