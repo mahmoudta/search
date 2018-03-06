@@ -78,6 +78,7 @@
         {
             $files=0;
             $checker=0;
+            $firstid=0;
             $currentid=0;
             foreach($invertedIndex[$word] as $fileid => $value){
                 $files++;
@@ -93,7 +94,6 @@
                         echo 'Error Occurred3<br />';
                         echo mysqli_error();
                     }
-                    $checker=1;
                 }else{
                     $stmt = $dbc->prepare("INSERT INTO postingfile (fileid,hits,nextid) VALUES (?,?,?)");
                     $stmt->bind_param("iii",$fileid,$invertedIndex[$word][$fileid],$currentid);
@@ -115,8 +115,12 @@
                 $myrow = $result->fetch_assoc();
                 $currentid=$myrow['id'];
                 //echo "<p>".$word."->".$filename."->".$invertedIndex[$word][$filename]."</p>";
+                if($checker==0){
+                    $firstid=$currentid;
+                }
+                $checker=1;
             }
-            
+            mysqli_begin_Transaction($dbc);
             $stmt = $dbc->prepare("INSERT INTO invertedindex (word,hits,postingid) VALUES (?,?,?)");
             $stmt->bind_param("sii",$word,$files,$currentid);
             $stmt->execute();
@@ -125,9 +129,42 @@
                 $dbc->commit();
                 // echo 'added with succses';
             }else{
-                echo 'Error Occurred5<br />';
-                echo mysqli_error();
+                $dbc->rollback();
+                $stmt = $dbc->prepare("SELECT postingid FROM `invertedindex` WHERE word = ?");
+                $stmt->bind_param("s",$word);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $stmt->fetch();
+                $myrow = $result->fetch_assoc();
+                $postingid=$myrow['id'];
+                $stmt = $dbc->prepare("update postingfile set nextid =?  where id = ?");
+                $stmt->bind_param("ii", $postingid, $firstid);
+                $stmt->execute();
+                $affected_rows =mysqli_stmt_affected_rows($stmt);
+                if($affected_rows == 1){
+                    $dbc->commit();
+                    // echo 'added with succses';
+                    
+                }else{
+                    
+                    echo 'Error Occurred<br />';
+                    echo mysqli_error();
+                }
+                $stmt = $dbc->prepare("update invertedindex set postingid =?,hits=hits+?  where word = ?");
+                $stmt->bind_param("iis", $currentid,$files, $word);
+                $stmt->execute();
+                $affected_rows =mysqli_stmt_affected_rows($stmt);
+                if($affected_rows == 1){
+                    $dbc->commit();
+                    // echo 'added with succses';
+                    
+                }else{
+                    
+                    echo 'Error Occurred0<br />';
+                    echo mysqli_error();
+                }
             }
+            
         }
         $stmt->close();
         $dbc->close();
