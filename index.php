@@ -1,3 +1,30 @@
+<?php
+include 'connect.php';
+
+
+session_start();
+if(!empty($_POST["username"])){
+  $query = "SELECT * FROM users_234 WHERE email ='"
+  . $_POST["username"]
+  . "' and password = '"
+  . $_POST["password"]
+  ."'";
+
+  $result = mysqli_query($connection, $query);
+  $row = mysqli_fetch_array($result);
+  if(is_array($row)){
+    $_SESSION["name"]=$row['name'];
+    header('location:' . URL . 'Dashboard.php?id='.$_SESSION['id']);
+
+  }else {
+    echo "authentication failure";
+  }
+
+ ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,17 +68,17 @@
       <button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Login</button>
     </div>
     <div class="sign-in">
-      <form class="form-horizontal" action="/action_page.php">
+      <form class="form-horizontal" action="admin.php" method="post">
         <div class="form-group row ">
           <label class="control-label col-sm-3" for="email">Email:</label>
           <div class="col-sm-8">
-            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+            <input type="text" class="form-control" placeholder="Enter username" name="username">
           </div>
         </div>
         <div class="form-group row">
           <label class="control-label col-sm-3" for="pwd">Password:</label>
           <div class="col-sm-8">
-            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+            <input type="password" class="form-control"  placeholder="Enter password" name="password">
           </div>
         </div>
 
