@@ -66,13 +66,21 @@
                     }
                     
                 }
-                if(!array_key_exists($word, $invertedIndex)) $invertedIndex[$word] = [];
-                if(!in_array($filename, $invertedIndex[$word], true)) $invertedIndex[$word][] = $filename;
+                if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
+                if(!in_array($filename, $invertedIndex[$word], true)) {
+                    $invertedIndex[$word][] = $filename;
+                    $invertedIndex[$word][$filename]= [];
+                    $invertedIndex[$word][$filename]= 1;
+                }else{$invertedIndex[$word][$filename]++;}
             }
         }
+        
+        
+        
         $stmt->close();
         $dbc->close();
     }
     buildInvertedIndex(['ho.txt','fo.txt']);
+    
 
 ?>
