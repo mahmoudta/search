@@ -17,8 +17,7 @@
                 $word = strtolower($match[0]);
                 
                 if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
-                if(!in_array($filename, $invertedIndex[$word], true)) {
-                    $invertedIndex[$word][] = $filename;
+                if(!array_key_exists($filename, $invertedIndex[$word])) {
                     $invertedIndex[$word][$filename]= [];
                     $invertedIndex[$word][$filename]= 1;
                 }else{$invertedIndex[$word][$filename]++;}
@@ -35,7 +34,7 @@ function lookupWord($invertedIndex, $word)
 
 $invertedIndex = buildInvertedIndex(['file1.txt','file2.txt']);
     
-    foreach(['beat', 'used', 'show', 'already'] as $word)
+   /* foreach(['beat', 'used', 'show', 'already'] as $word)
     {
         $word = strtolower($word);
         $matches = lookupWord($invertedIndex, $word);
@@ -47,7 +46,13 @@ $invertedIndex = buildInvertedIndex(['file1.txt','file2.txt']);
         {
             echo "<p>Unable to find the word \"$word\" in the index</p>";
         }
-        if($word=='already')
-        echo "<p>test \"already\" in the  files1 : ".$matches[0]." times </p>";
+    }*/
+    
+    foreach($invertedIndex as $word => $value)
+    {
+        foreach($invertedIndex[$word] as $filename => $value){
+            echo "<p>".$word."->".$filename."->".$invertedIndex[$word][$filename]."</p>";
+        }
+        
     }
 ?>
