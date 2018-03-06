@@ -1,29 +1,23 @@
 <?php
 include 'connect.php';
-
-
+include 'config.php';
 session_start();
 if(!empty($_POST["username"])){
-  $query = "SELECT * FROM users_234 WHERE email ='"
+  $query = "SELECT * FROM `users` WHERE user ='"
   . $_POST["username"]
   . "' and password = '"
   . $_POST["password"]
   ."'";
-
-  $result = mysqli_query($connection, $query);
+  $result = mysqli_query($dbc, $query);
   $row = mysqli_fetch_array($result);
   if(is_array($row)){
-    $_SESSION["name"]=$row['name'];
-    header('location:' . URL . 'Dashboard.php?id='.$_SESSION['id']);
-
+    $_SESSION["user"]=$row['user'];
+    header('Location:'.URL.'admin.php');
   }else {
     echo "authentication failure";
   }
-
- ?>
-
-
-
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,15 +62,15 @@ if(!empty($_POST["username"])){
       <button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Login</button>
     </div>
     <div class="sign-in">
-      <form class="form-horizontal" action="admin.php" method="post">
+      <form class="form-horizontal" action="/" method="post">
         <div class="form-group row ">
-          <label class="control-label col-sm-3" for="email">Email:</label>
+          <label class="control-label col-sm-3" for="username">Username:</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" placeholder="Enter username" name="username">
           </div>
         </div>
         <div class="form-group row">
-          <label class="control-label col-sm-3" for="pwd">Password:</label>
+          <label class="control-label col-sm-3" for="password">Password:</label>
           <div class="col-sm-8">
             <input type="password" class="form-control"  placeholder="Enter password" name="password">
           </div>
