@@ -51,9 +51,11 @@ DROP TABLE IF EXISTS `invertedindex`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invertedindex` (
   `word` varchar(15) NOT NULL,
-  `matches` varchar(999) DEFAULT NULL,
+  `hits` int(11) DEFAULT '1',
+  `postingid` int(11) DEFAULT NULL,
   PRIMARY KEY (`word`),
-  UNIQUE KEY `word_UNIQUE` (`word`)
+  UNIQUE KEY `word_UNIQUE` (`word`),
+  UNIQUE KEY `postingid_UNIQUE` (`postingid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,6 +66,31 @@ CREATE TABLE `invertedindex` (
 LOCK TABLES `invertedindex` WRITE;
 /*!40000 ALTER TABLE `invertedindex` DISABLE KEYS */;
 /*!40000 ALTER TABLE `invertedindex` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `postingfile`
+--
+
+DROP TABLE IF EXISTS `postingfile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `postingfile` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fileid` int(11) DEFAULT NULL,
+  `hits` int(11) DEFAULT NULL,
+  `nextid` int(11) DEFAULT '-1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `postingfile`
+--
+
+LOCK TABLES `postingfile` WRITE;
+/*!40000 ALTER TABLE `postingfile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `postingfile` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -99,4 +126,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-06  0:19:50
+-- Dump completed on 2018-03-06 21:29:59

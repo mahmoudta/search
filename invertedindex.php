@@ -7,7 +7,7 @@
         
         foreach($filenames as $filename)
         {
-            mysqli_begin_Transaction($dbc);
+           mysqli_begin_Transaction($dbc);
             $stmt = $dbc->prepare("INSERT INTO documents (name) VALUES (?)");
             $stmt->bind_param("s",$filename);
             $stmt->execute();
@@ -17,7 +17,7 @@
                 // echo 'added with succses';
             }else{
                 $dbc->rollback();
-                echo 'Error Occurred<br />';
+                echo 'one of the files name is already used<br />';
                 echo mysqli_error();
             }
 
@@ -27,7 +27,7 @@
             $result = $stmt->get_result();
             $stmt->fetch();
             $myrow = $result->fetch_assoc();
-            $Rid="R".$myrow['R_id'];
+            $Rid=$myrow['R_id'];
             
             $data = file_get_contents($filename);
             
@@ -38,7 +38,7 @@
             foreach($matches as $match)
             {
                 $word = strtolower($match[0]);
-                mysqli_begin_Transaction($dbc);
+               /* mysqli_begin_Transaction($dbc);
                 $stmt = $dbc->prepare("INSERT INTO invertedindex (word, matches) VALUES (?, ?)");
                 $stmt->bind_param("ss", $word, $Rid);
                 $stmt->execute();
@@ -65,18 +65,70 @@
                         echo mysqli_error();
                     }
                     
-                }
+                }*/
                 if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
-                if(!in_array($filename, $invertedIndex[$word], true)) {
-                    $invertedIndex[$word][] = $filename;
-                    $invertedIndex[$word][$filename]= [];
-                    $invertedIndex[$word][$filename]= 1;
-                }else{$invertedIndex[$word][$filename]++;}
+                if(!array_key_exists($Rid, $invertedIndex[$word])) {
+                    $invertedIndex[$word][$Rid]= [];
+                    $invertedIndex[$word][$Rid]= 1;
+                }else{$invertedIndex[$word][$Rid]++;}
             }
         }
         
-        
-        
+        foreach($invertedIndex as $word => $value)
+        {
+            $files=0;
+            $checker=0;
+            $currentid=0;
+            foreach($invertedIndex[$word] as $fileid => $value){
+                $files++;
+                if($checker==0){
+                    $stmt = $dbc->prepare("INSERT INTO postingfile (fileid,hits) VALUES (?,?)");
+                    $stmt->bind_param("ii",$fileid,$invertedIndex[$word][$fileid]);
+                    $stmt->execute();
+                    $affected_rows =mysqli_stmt_affected_rows($stmt);
+                    if($affected_rows == 1){
+                        $dbc->commit();
+                        // echo 'added with succses';
+                    }else{
+                        echo 'Error Occurred3<br />';
+                        echo mysqli_error();
+                    }
+                    $checker=1;
+                }else{
+                    $stmt = $dbc->prepare("INSERT INTO postingfile (fileid,hits,nextid) VALUES (?,?,?)");
+                    $stmt->bind_param("iii",$fileid,$invertedIndex[$word][$fileid],$currentid);
+                    $stmt->execute();
+                    $affected_rows =mysqli_stmt_affected_rows($stmt);
+                    if($affected_rows == 1){
+                        $dbc->commit();
+                        // echo 'added with succses';
+                    }else{
+                        echo 'Error Occurred4<br />';
+                        echo mysqli_error();
+                    }
+                }
+                $stmt = $dbc->prepare("SELECT id FROM `postingfile` WHERE id = @@Identity");
+                //$stmt->bind_param("s",$filename);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $stmt->fetch();
+                $myrow = $result->fetch_assoc();
+                $currentid=$myrow['id'];
+                //echo "<p>".$word."->".$filename."->".$invertedIndex[$word][$filename]."</p>";
+            }
+            
+            $stmt = $dbc->prepare("INSERT INTO invertedindex (word,hits,postingid) VALUES (?,?,?)");
+            $stmt->bind_param("sii",$word,$files,$currentid);
+            $stmt->execute();
+            $affected_rows =mysqli_stmt_affected_rows($stmt);
+            if($affected_rows == 1){
+                $dbc->commit();
+                // echo 'added with succses';
+            }else{
+                echo 'Error Occurred5<br />';
+                echo mysqli_error();
+            }
+        }
         $stmt->close();
         $dbc->close();
     }
