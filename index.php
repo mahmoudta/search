@@ -17,6 +17,10 @@ if(!empty($_POST["username"])){
     echo "authentication failure";
   }
 }
+
+if($_GET['logout']){
+  session_destroy();
+}
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +63,7 @@ if(!empty($_POST["username"])){
       </form>
     </div>
     <div class="user">
-      <button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Login</button>
+      <button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Log in</button>
     </div>
     <div class="sign-in">
       <form class="form-horizontal" action="/" method="post">
