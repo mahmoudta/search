@@ -4,9 +4,23 @@
       include 'connect.php';
         $invertedIndex = [];
 
+//        $stoplist = file('stoplist.txt');
+        $stoplist = file_get_contents('stoplist.txt');
+        $stop = preg_replace("/[']+/",' ',trim($stoplist));
+        
+//            preg_match_all('/(\w+)/', $stoplist, $stopwords, PREG_SET_ORDER);
+
+       // $stop= call_user_func_array('array_merge', $stopwords);
+//        $stop=array_merge(... $stopwords);
+//        $result = array_unique($stop);
+        print_r($stop);
+//        print_r($stop);
         foreach($filenames as $filename)
         {
-           mysqli_begin_Transaction($dbc);
+            $data = file_get_contents($filename);
+            /********************/
+            /********************/
+            mysqli_begin_Transaction($dbc);
             $stmt = $dbc->prepare("INSERT INTO documents (name) VALUES (?)");
             $stmt->bind_param("s",$filename);
             $stmt->execute();
@@ -27,49 +41,23 @@
             $stmt->fetch();
             $myrow = $result->fetch_assoc();
             $Rid=$myrow['R_id'];
+            
 
-            $data = file_get_contents($filename);
-
+            //echo $stoplist;
             if($data === false) die('Unable to read file: ' . $filename);
             $data=strip_tags($data);
             preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
-
+            
             foreach($matches as $match)
             {
                 $word = strtolower($match[0]);
-               /* mysqli_begin_Transaction($dbc);
-                $stmt = $dbc->prepare("INSERT INTO invertedindex (word, matches) VALUES (?, ?)");
-                $stmt->bind_param("ss", $word, $Rid);
-                $stmt->execute();
-                $affected_rows =mysqli_stmt_affected_rows($stmt);
-
-                if($affected_rows == 1){
-                    $dbc->commit();
-                   // echo 'added with succses';
-
-                }else{
-                    $dbc->rollback();
-
-                    $stmt = $dbc->prepare("update invertedindex set matches = concat(matches,concat('|', ?)) where word = ?");
-                    $stmt->bind_param("ss", $Rid, $word);
-                    $stmt->execute();
-                    $affected_rows =mysqli_stmt_affected_rows($stmt);
-                    if($affected_rows == 1){
-                        $dbc->commit();
-                        // echo 'added with succses';
-
-                    }else{
-
-                        echo 'Error Occurred<br />';
-                        echo mysqli_error();
-                    }
-
-                }*/
-                if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
-                if(!array_key_exists($Rid, $invertedIndex[$word])) {
-                    $invertedIndex[$word][$Rid]= [];
-                    $invertedIndex[$word][$Rid]= 1;
-                }else{$invertedIndex[$word][$Rid]++;}
+                if(strpos($stop,$word) === false){
+                    if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
+                    if(!array_key_exists($Rid, $invertedIndex[$word])) {
+                        $invertedIndex[$word][$Rid]= [];
+                        $invertedIndex[$word][$Rid]= 1;
+                    }else{$invertedIndex[$word][$Rid]++;}
+                }
             }
         }
 
@@ -168,6 +156,6 @@
             $dbc->close();
             $stmt->close();
     }
-    buildInvertedIndex(['doc1.html']);
+    buildInvertedIndex(['source/doc1.html']);
 
 ?>
