@@ -7,6 +7,7 @@
 //        $stoplist = file('stoplist.txt');
         $stoplist = file_get_contents('stoplist.txt');
         $stop = preg_replace("/[']+/",' ',trim($stoplist));
+<<<<<<< HEAD
 
 //            preg_match_all('/(\w+)/', $stoplist, $stopwords, PREG_SET_ORDER);
 
@@ -15,14 +16,25 @@
 //        $result = array_unique($stop);
         print_r($stop);
 //        print_r($stop);
+=======
+>>>>>>> master
         foreach($filenames as $filename)
         {
             $data = file_get_contents($filename);
-            /********************/
-            /********************/
+            //get title and description
+            $start = strpos($data, '<p>');
+            $end = strpos($data, '</p>', $start);
+            $description = substr($data, $start, $end-$start+4);
+            $description = html_entity_decode(strip_tags($description));
+            
+            $start = strpos($data, '<h1>');
+            $end = strpos($data, '</h1>', $start);
+            $title = substr($data, $start, $end-$start+4);
+            $title = html_entity_decode(strip_tags($title));
+            
             mysqli_begin_Transaction($dbc);
-            $stmt = $dbc->prepare("INSERT INTO documents (name) VALUES (?)");
-            $stmt->bind_param("s",$filename);
+            $stmt = $dbc->prepare("INSERT INTO documents (name,title,description) VALUES (?,?,?)");
+            $stmt->bind_param("sss",$filename,$title,$description);
             $stmt->execute();
             $affected_rows =mysqli_stmt_affected_rows($stmt);
             if($affected_rows == 1){
@@ -156,6 +168,6 @@
             $dbc->close();
             $stmt->close();
     }
-    buildInvertedIndex(['source/doc1.html']);
+    buildInvertedIndex(['source/doc1.html','source/doc2.html','source/doc3.html']);
 
 ?>
