@@ -1,5 +1,6 @@
 <?php
 include 'connect.php';
+include 'invertedindex.php';
 include 'config.php';
 session_start();
   if(!isset($_SESSION["user"])){
@@ -8,22 +9,20 @@ session_start();
 }
 if($_GET['parse']){getfiles();}
 function getfiles(){
-$dir = getcwd().'/Source'.'/';
-echo $dir."\n";
+$dir = getcwd().'/source'.'/';
 $files = scandir($dir);
 $size =count($files);
-echo '<br/>';
-print_r($files);
 $cleanarray = [];
 foreach ($files as $key => $value) {
   if($value !="." && $value != ".." && $value != ".DS_Store"){
-    $cleanarray[] = $value;
+    $cleanarray[] = 'source/'.$value;
   }
 }
-
-echo '<br/>';
-print_r($cleanarray);
-
+if($cleanarray){
+buildInvertedIndex($cleanarray);
+}else{
+  echo "No Files To add";
+}
 }
 ?>
 
