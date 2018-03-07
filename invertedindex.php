@@ -8,6 +8,8 @@
         $stoplist = file_get_contents('stoplist.txt');
         $stop = preg_replace("/[']+/",' ',trim($stoplist));
 
+
+
         foreach($filenames as $filename)
         {
             $data = file_get_contents($filename);
