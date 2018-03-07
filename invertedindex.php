@@ -1,10 +1,9 @@
 <?php
-    
+include 'connect.php';
     function buildInvertedIndex($filenames)
     {
-        include 'connect.php';
         $invertedIndex = [];
-        
+
         foreach($filenames as $filename)
         {
            mysqli_begin_Transaction($dbc);
@@ -28,13 +27,13 @@
             $stmt->fetch();
             $myrow = $result->fetch_assoc();
             $Rid=$myrow['R_id'];
-            
+
             $data = file_get_contents($filename);
-            
+
             if($data === false) die('Unable to read file: ' . $filename);
-            
+
             preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
-            
+
             foreach($matches as $match)
             {
                 $word = strtolower($match[0]);
@@ -43,14 +42,14 @@
                 $stmt->bind_param("ss", $word, $Rid);
                 $stmt->execute();
                 $affected_rows =mysqli_stmt_affected_rows($stmt);
-                
+
                 if($affected_rows == 1){
                     $dbc->commit();
                    // echo 'added with succses';
-                    
+
                 }else{
                     $dbc->rollback();
-                    
+
                     $stmt = $dbc->prepare("update invertedindex set matches = concat(matches,concat('|', ?)) where word = ?");
                     $stmt->bind_param("ss", $Rid, $word);
                     $stmt->execute();
@@ -58,13 +57,13 @@
                     if($affected_rows == 1){
                         $dbc->commit();
                         // echo 'added with succses';
-                        
+
                     }else{
-                        
+
                         echo 'Error Occurred<br />';
                         echo mysqli_error();
                     }
-                    
+
                 }*/
                 if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
                 if(!array_key_exists($Rid, $invertedIndex[$word])) {
@@ -73,7 +72,7 @@
                 }else{$invertedIndex[$word][$Rid]++;}
             }
         }
-        
+
         foreach($invertedIndex as $word => $value)
         {
             $files=0;
@@ -144,9 +143,9 @@
                 if($affected_rows == 1){
                     $dbc->commit();
                     // echo 'added with succses';
-                    
+
                 }else{
-                    
+
                     echo 'Error Occurred<br />';
                     echo mysqli_error();
                 }
@@ -157,19 +156,19 @@
                 if($affected_rows == 1){
                     $dbc->commit();
                     // echo 'added with succses';
-                    
+
                 }else{
-                    
+
                     echo 'Error Occurred0<br />';
                     echo mysqli_error();
                 }
             }
-            
+
         }
         $stmt->close();
         $dbc->close();
     }
     buildInvertedIndex(['ho.txt','fo.txt']);
-    
+
 
 ?>

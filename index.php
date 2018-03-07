@@ -18,9 +18,6 @@ if(!empty($_POST["username"])){
   }
 }
 
-if($_GET['logout']){
-  session_destroy();
-}
 ?>
 
 <!DOCTYPE html>
@@ -53,10 +50,10 @@ if($_GET['logout']){
         <span>Search Engine</span>
     </div>
     <div class="form">
-      <form class="" action="index.html" method="post">
+      <form action=" " method="post" id="search-post">
         <div class="form-inputs">
-        <input class="form-control" type="text" name="search" placeholder="Search here">
-        <button class="btn btn-default"type="submit" name="search">
+        <input class="form-control" type="text" id="search" placeholder="Search here">
+        <button class="btn btn-default" type="submit" name="search-button">
           <span class="glyphicon glyphicon-search"></span>
         </button>
       </div>
@@ -94,9 +91,9 @@ if($_GET['logout']){
 </header>
 
 
-  <div class="container">
+  <div class="container" id="result">
 
-</div>
+  </div>
 
 
 
