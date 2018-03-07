@@ -27,6 +27,8 @@ DROP TABLE IF EXISTS `documents`;
 CREATE TABLE `documents` (
   `R_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `description` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`R_id`),
   UNIQUE KEY `R_id_UNIQUE` (`R_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
@@ -126,4 +128,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-06 21:29:59
+-- Dump completed on 2018-03-07 19:35:51
