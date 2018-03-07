@@ -7,17 +7,9 @@
 //        $stoplist = file('stoplist.txt');
         $stoplist = file_get_contents('stoplist.txt');
         $stop = preg_replace("/[']+/",' ',trim($stoplist));
-<<<<<<< HEAD
 
-//            preg_match_all('/(\w+)/', $stoplist, $stopwords, PREG_SET_ORDER);
 
-       // $stop= call_user_func_array('array_merge', $stopwords);
-//        $stop=array_merge(... $stopwords);
-//        $result = array_unique($stop);
-        print_r($stop);
-//        print_r($stop);
-=======
->>>>>>> master
+
         foreach($filenames as $filename)
         {
             $data = file_get_contents($filename);
