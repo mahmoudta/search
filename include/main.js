@@ -8,7 +8,7 @@ $(document).ready(function(){
 $(function(){
   $("#search-post").submit(function(){
     var search = $("#search").val().toLowerCase();
-    var dataString = 'search=' + search;
+    var dataString ='search=' + search;
     console.log(dataString);
 
     $.ajax({
