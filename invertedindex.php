@@ -1,7 +1,7 @@
 <?php
-include 'connect.php';
     function buildInvertedIndex($filenames)
     {
+      include 'connect.php';
         $invertedIndex = [];
 
         foreach($filenames as $filename)
@@ -31,7 +31,7 @@ include 'connect.php';
             $data = file_get_contents($filename);
 
             if($data === false) die('Unable to read file: ' . $filename);
-
+            $data=strip_tags($data);
             preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
 
             foreach($matches as $match)
@@ -165,10 +165,9 @@ include 'connect.php';
             }
 
         }
-        $stmt->close();
-        $dbc->close();
+            $dbc->close();
+            $stmt->close();
     }
-    buildInvertedIndex(['ho.txt','fo.txt']);
-
+    buildInvertedIndex(['doc1.html']);
 
 ?>
