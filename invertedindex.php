@@ -15,6 +15,7 @@
             $end = strpos($data, '</p>', $start);
             $description = substr($data, $start, $end-$start+4);
             $description = html_entity_decode(strip_tags($description));
+            
             $start = strpos($data, '<h1>');
             $end = strpos($data, '</h1>', $start);
             $title = substr($data, $start, $end-$start+4);
