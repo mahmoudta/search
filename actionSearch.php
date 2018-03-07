@@ -8,7 +8,7 @@ if(is_array($row)){
   $run = $row['hits'];
   $currentid = $row['postingid'];
 }else{
-  echo "<p>No Files Found</p>";
+   echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><p>No results found for <b>'.$_POST['search'].'</b></p></div>';
 }
 
 
@@ -20,7 +20,7 @@ while($run != 0){
   $result1 = mysqli_query($dbc, $query1);
   $row1 = mysqli_fetch_array($result1);
   if(is_array($row1)){
-    echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a href="'.$row1[name].'"><h3>';
+    echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a target="_blank" href="'.$row1[name].'"><h3>';
     echo $row1['title']."</h3></a><p>".$row1['description']."</p></div>";
   }
   $currentid = $row1['nextid'];
