@@ -5,6 +5,19 @@ header{
   padding-bottom: 10px;
   position: relative;
 }
+#result div{
+  margin-top: 10px;
+}
+#result div:first-of-type{
+  margin-top: 30px
+}
+#result h3{
+  font-size: 18px;
+}
+#result p{
+  line-height: 1.4;
+word-wrap: break-word;
+}
 
 nav{
   display: block;
