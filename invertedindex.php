@@ -3,13 +3,8 @@
     {
       include 'connect.php';
         $invertedIndex = [];
-
-//        $stoplist = file('stoplist.txt');
         $stoplist = file_get_contents('stoplist.txt');
         $stop = preg_replace("/[']+/",' ',trim($stoplist));
-
-
-
         foreach($filenames as $filename)
         {
             $data = file_get_contents($filename);
@@ -18,12 +13,12 @@
             $end = strpos($data, '</p>', $start);
             $description = substr($data, $start, $end-$start+4);
             $description = html_entity_decode(strip_tags($description));
-            
+
             $start = strpos($data, '<h1>');
             $end = strpos($data, '</h1>', $start);
             $title = substr($data, $start, $end-$start+4);
             $title = html_entity_decode(strip_tags($title));
-            
+
             mysqli_begin_Transaction($dbc);
             $stmt = $dbc->prepare("INSERT INTO documents (name,title,description) VALUES (?,?,?)");
             $stmt->bind_param("sss",$filename,$title,$description);
@@ -63,6 +58,12 @@
                     }else{$invertedIndex[$word][$Rid]++;}
                 }
             }
+            $main = getcwd();
+            list($garbage,$newfile) = explode('/',$filename);
+            $newfile = $main.'/data'.'/'.$newfile;
+            $filename = $main.'/'.$filename;
+            echo $file;
+            rename($filename,$newfile);
         }
 
         foreach($invertedIndex as $word => $value)
@@ -80,7 +81,7 @@
                     $affected_rows =mysqli_stmt_affected_rows($stmt);
                     if($affected_rows == 1){
                         $dbc->commit();
-                        // echo 'added with succses';
+
                     }else{
                         echo 'Error Occurred3<br />';
                         echo mysqli_error();
@@ -134,7 +135,6 @@
                 $affected_rows =mysqli_stmt_affected_rows($stmt);
                 if($affected_rows == 1){
                     $dbc->commit();
-                    // echo 'added with succses';
 
                 }else{
 
@@ -160,6 +160,4 @@
             $dbc->close();
             $stmt->close();
     }
-    buildInvertedIndex(['source/doc1.html','source/doc2.html','source/doc3.html']);
-
 ?>
