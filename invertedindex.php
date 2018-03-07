@@ -7,7 +7,7 @@
 //        $stoplist = file('stoplist.txt');
         $stoplist = file_get_contents('stoplist.txt');
         $stop = preg_replace("/[']+/",' ',trim($stoplist));
-        
+
 //            preg_match_all('/(\w+)/', $stoplist, $stopwords, PREG_SET_ORDER);
 
        // $stop= call_user_func_array('array_merge', $stopwords);
@@ -41,13 +41,13 @@
             $stmt->fetch();
             $myrow = $result->fetch_assoc();
             $Rid=$myrow['R_id'];
-            
+
 
             //echo $stoplist;
             if($data === false) die('Unable to read file: ' . $filename);
             $data=strip_tags($data);
             preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
-            
+
             foreach($matches as $match)
             {
                 $word = strtolower($match[0]);
