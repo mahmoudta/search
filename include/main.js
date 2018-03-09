@@ -37,23 +37,9 @@ $(function(){
   });
 });
 
-// $('body').on('click','a',function(e){
-//
-//
-// });
-
-//
-// function highlight(text) {
-//   $(document).ready(function(){
-//     console.log(text);
-//     var inputText = $("main");
-//     var innerhtml = $("main").innerHTML;
-//     console.log(innerhtml);
-//     var index = innerhtml.indexOf("text");
-//     if ( index >= 0 )
-//     {
-//         innerhtml = innerhtml.substring(0,index) + "<span>" + innerhtml.substring(index,index+text.length) + "</span>" + innerhtml.substring(index + text.length);
-//         inputText.innerHTML = innerhtml;
-//     }
-//   });
-// };
+$(document).ready(function(){
+  $("#advanced").click(function(){
+    $("#advanced_tools").slideToggle("fast");
+    $(".myform").toggle();
+  });
+});
