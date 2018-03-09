@@ -44,51 +44,71 @@ if(!empty($_POST["username"])){
 <body>
 
 <header>
-  <nav>
-    <div class="brand">
-        <span>Search Engine</span>
-    </div>
-    <div class="form">
-      <form action=" " method="post" id="search-post">
-        <div class="form-inputs">
-        <input class="form-control" type="text" id="search" placeholder="Search here">
-        <button class="btn btn-default" type="submit" name="search-button">
-          <span class="glyphicon glyphicon-search"></span>
-        </button>
+  <div class="container-fluid">
+    <nav>
+      <div class="brand">
+          <span>Search Engine</span>
       </div>
-      </form>
-    </div>
-    <div class="user">
-      <button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Log in</button>
-    </div>
-    <div class="sign-in">
-      <form class="form-horizontal" action="/" method="post">
-        <div class="form-group row ">
-          <label class="control-label col-sm-3" for="username">Username:</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" placeholder="Enter username" name="username">
-          </div>
+      <div class="myform">
+        <form action=" " method="post" id="search-post">
+          <div class="form-inputs">
+          <input class="form-control" type="text" id="search" placeholder="Search here">
+          <button class="btn btn-default" type="submit" name="search-button">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
         </div>
-        <div class="form-group row">
-          <label class="control-label col-sm-3" for="password">Password:</label>
-          <div class="col-sm-8">
-            <input type="password" class="form-control"  placeholder="Enter password" name="password">
+        </form>
+      </div>
+      <div class="user">
+        <button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Log in</button>
+      </div>
+      <div class="sign-in">
+        <form class="form-horizontal" action="/" method="post">
+          <div class="form-group row ">
+            <label class="control-label col-sm-3" for="username">Username:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Enter username" name="username">
+            </div>
           </div>
-        </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="password">Password:</label>
+            <div class="col-sm-8">
+              <input type="password" class="form-control"  placeholder="Enter password" name="password">
+            </div>
+          </div>
 
-        <div class="form-group row ">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Submit</button>
+          <div class="form-group row ">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">Submit</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+    </nav>
+    <div class="advanced-search">
+      <button id="advanced">Advanced Search</button>
     </div>
-  </nav>
-  <div class="advanced-search">
-    <button >Advanced Search</button>
   </div>
-</header>
 
+</header>
+<body>
+<div class="col-xs-12 col-md-8 col-md-offset-2" id="advanced_tools">
+  <form class="form form-inline" action="">
+    <div class="form-group col-xs-12">
+      <label class="col-xs-3" for="operand">OPERANDS SEARCH:</label>
+      <input type="text" class="form-control col-xs-6" id="operand" name="operand" placeholder=" ( term And term ) OR term">
+        <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+    </div>
+</form>
+
+<form class="form form-inline" action="">
+  <div class="form-group col-xs-12">
+    <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
+    <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">
+      <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+  </div>
+</form>
+</div>
 
   <div class="container" id="result">
 
@@ -104,6 +124,13 @@ if(!empty($_POST["username"])){
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="include/js/bootstrap.min.js"></script>
 <script src="include/main.js"></script>
+
+
+<?php
+mysqli_free_result($result);
+
+mysqli_close($dbc);
+?>
 
 </body>
 

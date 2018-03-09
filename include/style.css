@@ -19,9 +19,6 @@ header{
 word-wrap: break-word;
 }
 
-main span{
-  background-color: yellow;
-}
 
 nav{
   display: block;
@@ -37,14 +34,14 @@ nav{
 .brand:hover, .user>button:hover {
   color: #fff;
 }
-.form{
+.myform{
   float: left;
   margin-left: 15px;
   margin-top: 10px;
   display: inline-block;
   width: 60%;
 }
-.form button{
+.myform button{
   display: inline-block;
   float: left;
   padding: 6px 12px;
@@ -104,6 +101,9 @@ nav::after{
 .advanced-search>button:hover{
   color: #9d9d9d;
 }
+.form-inline .form-control {
+    width: 50%;
+}
 .sign-in {
     position: absolute;
     right: 0;
@@ -114,7 +114,30 @@ nav::after{
     padding-left: 15px;
     color: #fff;
     display: none;
+    z-index: 100;
 }
 button:focus{
   outline: none;
+}
+.form::after{
+  clear: both;
+  display: table;
+  content: " "
+}
+#advanced_tools{
+  background-color: #22222229;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  padding-top: 30px;
+  display: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+}
+.form{
+  padding: 5px;
+  margin-top: 15px;
 }
