@@ -3,8 +3,9 @@
     {
       include 'connect.php';
         $invertedIndex = [];
-        $stoplist = file_get_contents('stoplist.txt');
-        $stop = preg_replace("/[']+/",' ',trim($stoplist));
+//        $stoplist = file_get_contents('stoplist.txt');
+//        $stop = preg_replace("/[']+/",' ',trim($stoplist));
+//        if(strpos($stop,$word) === false)
         foreach($filenames as $filename)
         {
             $checker=0;
@@ -43,24 +44,24 @@
                 echo mysqli_error();
             }
             if($checker==0){
-            $stmt = $dbc->prepare("SELECT `R_id` FROM `documents` WHERE `name` = ?");
-            $stmt->bind_param("s",$filename);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->fetch();
-            $myrow = $result->fetch_assoc();
-            $Rid=$myrow['R_id'];
+                $stmt = $dbc->prepare("SELECT `R_id` FROM `documents` WHERE `name` = ?");
+                $stmt->bind_param("s",$filename);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $stmt->fetch();
+                $myrow = $result->fetch_assoc();
+                $Rid=$myrow['R_id'];
 
 
-            //echo $stoplist;
-            if($data === false) die('Unable to read file: ' . $filename);
-            $data=strip_tags($data);
-            preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
-
-            foreach($matches as $match)
-            {
-                $word = strtolower($match[0]);
-                if(strpos($stop,$word) === false){
+                //echo $stoplist;
+                if($data === false) die('Unable to read file: ' . $filename);
+                $data=strip_tags($data);
+                preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
+                $wordcount[$Rid]=0;
+                foreach($matches as $match)
+                {
+                    $wordcount[$Rid]++;
+                    $word = strtolower($match[0]);
                     if(!array_key_exists($word, $invertedIndex)){ $invertedIndex[$word] = [];}
                     if(!array_key_exists($Rid, $invertedIndex[$word])) {
                         $invertedIndex[$word][$Rid]= [];
@@ -68,9 +69,8 @@
                     }else{$invertedIndex[$word][$Rid]++;}
                 }
             }
-            }
         }
-
+        
         foreach($invertedIndex as $word => $value)
         {
             mysqli_begin_Transaction($dbc);
@@ -96,8 +96,9 @@
             $files=0;
             foreach($invertedIndex[$word] as $fileid => $value){
                 $files++;
-                    $stmt = $dbc->prepare("INSERT INTO postingfile (fileid,hits,wordid) VALUES (?,?,?)");
-                    $stmt->bind_param("iii",$fileid,$invertedIndex[$word][$fileid],$wordid);
+                $tf=round($invertedIndex[$word][$fileid]/$wordcount[$fileid], 9);
+                    $stmt = $dbc->prepare("INSERT INTO postingfile (fileid,hits,tf,wordid) VALUES (?,?,?,?)");
+                    $stmt->bind_param("iidi",$fileid,$invertedIndex[$word][$fileid],$tf,$wordid);
                     $stmt->execute();
                     $affected_rows =mysqli_stmt_affected_rows($stmt);
                     if($affected_rows == 1){
