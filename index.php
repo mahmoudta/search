@@ -11,7 +11,7 @@ if(!empty($_POST["username"])){
   $result = mysqli_query($dbc, $query);
   $row = mysqli_fetch_array($result);
   if(is_array($row)){
-    $_SESSION["user"]=$row['user'];
+    $_SESSION['user']=$row['user'];
     header('Location:'.URL.'admin.php');
   }else {
     echo "authentication failure";
@@ -19,7 +19,6 @@ if(!empty($_POST["username"])){
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
