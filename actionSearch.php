@@ -1,39 +1,25 @@
 <?php
 include 'connect.php';
-// include 'invertedindexfunctions.php'
+include 'invertedindexfunctions.php'
 
-$data = explode(",", $_POST['search']);
-//simplesearch($data);
-foreach($data as $d){
-     echo $d."<br>";
+if(isset($_POST['search'])){
+  $data = explode(",", $_POST['search']);
+  printResult(simplesearch($data));
 }
-// $query = "SELECT * FROM `invertedindex` WHERE word='".$_POST['search']."'";
-// $result = mysqli_query($dbc, $query);
-// $row = mysqli_fetch_array($result);
-// if(is_array($row)){
-//   $run = $row['hits'];
-//   $currentid = $row['id'];
-// }else{
-//    echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><p>No results found for <b>'.$_POST['search'].'</b></p></div>';
-// }
-//
-// $query1 = "SELECT postingfile.fileid, postingfile.hits, documents.name, documents.title, documents.description
-// FROM postingfile
-// INNER JOIN documents ON postingfile.wordid=$currentid and documents.R_id =postingfile.fileid ";
-// $result1 = mysqli_query($dbc, $query1);
-// // $row1 = mysqli_fetch_array($result1);
-//
-// while ($row1 = mysqli_fetch_array($result1)) {
-//   echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a href="'.$row1['name'].'"><h3>';
-//   echo $row1['title']."</h3></a><p>".$row1['description']."</p></div>";
-// }
 
-  // if(is_array($row1)){
-  //   echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a href="'.$row1['name'].'"><h3>';
-  //   echo $row1['title']."</h3></a><p>".$row1['description']."</p></div>";
-  // }
-  // $currentid = $row1['nextid'];
-  // $run--;
-// }
+function printResult($result){
+  if(emty($result[0])){
+    echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><p>No results found for <b>';
+    foreach($data as $d){
+         echo $d;
+    }
+    echo '</b></p></div>';
 
+  }else{
+      foreach ($result[0] as $key => $value) {
+          echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a href="'.$result[1][$key]['name'].'"><h3>';
+          echo $result[1][$key]['title']."</h3></a><p>".$result[1][$key]['description']."</p></div>";
+      }
+}/*else*/
+}
 ?>
