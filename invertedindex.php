@@ -10,7 +10,7 @@
         {
             $checker=0;
             $data = file_get_contents($filename);
-            
+            if($data === false) die('Unable to read file: ' . $filename);
             $main = getcwd();
             $oldfilename = $main.'/'.$filename;
             list($garbage,$newfile) = explode('/',$filename);/*newfile = text.html*/
@@ -54,7 +54,7 @@
 
 
                 //echo $stoplist;
-                if($data === false) die('Unable to read file: ' . $filename);
+                
                 $data=strip_tags($data);
                 preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
                 $wordcount[$Rid]=0;

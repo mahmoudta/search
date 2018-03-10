@@ -62,12 +62,12 @@
             
             $rankedarray[$doc]=round($dot/($doccal*$query),9);
         }
+        arsort($rankedarray);
        return $rankedarray;
     }
-    function simplesearch($string)
+    function search($words,$searchin=0)
     {
-
-        preg_match_all('/(\w+)/', $string, $words, PREG_SET_ORDER);
+        
         $searchwords=[];
         $wordidf=[];
         $totalcount=0;
@@ -75,29 +75,47 @@
         $alldocs=[];
         foreach($words as $word){
             $totalcount++;
-            $word = strtolower($word[0]);
             if(!array_key_exists($word, $searchwords)){
-                $array=lookupWord($word,0);
-                $allresult[$word]=$array[1];
+                $array=lookupWord($word,$searchin);
                 $wordidf[$word]=$array[0];
-                $alldocs=array_unique(array_merge($alldocs,$array[2]), SORT_REGULAR);
                 $searchwords[$word]=1;
+                if (!empty($array[2])){
+                    $allresult[$word]=$array[1];
+                    $alldocs=array_unique(array_merge($alldocs,$array[2]), SORT_REGULAR);
+                }else
+                    $allresult[$word]=[];
                 
             }
             else
                 $searchwords[$word]++;
             
         }
+        
         foreach( $searchwords as $word=>$count)
             $wordsweight[$word]=round(($count/$totalcount)*$wordidf[$word],9);
         //$allresult of each word with the file list and its weight
         //$alldocs list of all the used docs
         //$wordsweight the weight of each word in Query
-        ranking($allresult,$alldocs,$wordsweight);
-         //print_r($allresult);
+        $ranked=ranking($allresult,$alldocs,$wordsweight);
+        print_r ($ranked);
+        return $ranked;
     }
     
-   
+    function  simplesearch($words){
+        $data = file_get_contents('stoplist.txt');
+        preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
+        $stoplist=[];
+        foreach($matches as $match)
+        $stoplist=array_unique(array_merge($stoplist,$match), SORT_REGULAR);
+        print_r($stoplist);
+        $newwordlist=[];
+        search($words);
+        
+    }
+    function advancedsearch(){
+        
+        
+    }
     function testranking(){
         $allresult=array('life'=>array(1=>0.140550715,2=>0.200786736),'learning'=>array(1=>0.140550715,3=>0.468502384));
             $alldocs=array(0=>1,1=>2,2=>3);
@@ -105,5 +123,5 @@
         ranking($allresult,$alldocs,$wordsweight);
     }
     //testranking();
-    simplesearch("will a act");
+    simplesearch(array('will','act','a','all'));
 ?>
