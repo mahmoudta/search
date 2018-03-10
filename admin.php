@@ -96,17 +96,22 @@ session_start();
   <label></label>
   <div class="col-xs-12 hide-document">
   <span><b>check the documents you want to hide:</b></span>
-  <form>
+  <form action="" method="post">
 <?php
-$query = "SELECT documents.R_id, documents.name FROM documents";
+$query = "SELECT documents.R_id, documents.name, documents.active FROM documents";
 $result = mysqli_query($dbc, $query);
 while($row = mysqli_fetch_array($result)){
   echo '<label class="checkbox-inline">';
-    echo'<input type="checkbox" value="'.$row[R_id].'">'.$row['name'];
+    if($row['active']==1){
+    echo'<input name="documents[]" type="checkbox" change="0" value="'.$row[R_id].' ">'.$row['name'];
+  }else{
+    echo'<input name="documents[]" type="checkbox" checked="true" change="0" value="'.$row[R_id].'">'.$row['name'];
+  }
   echo'</label>';
 }
 ?>
 <button class="btn btn-danger" class="col-md-1 col-md-offset-1" type="submit" name="hide"> hide document</button>
+<span id="message"></span>
  </form>
    <hr>
 </div>
@@ -120,11 +125,11 @@ while($row = mysqli_fetch_array($result)){
     </div>
 </form>
 
-<form class="form form-inline" action="">
+<form class="form form-inline" id="wildSearch" action="" method="post">
   <div class="form-group col-xs-12">
     <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
     <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">
-      <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+      <button type="submit" name"wildsearch" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
   </div>
 </form>
 </div>

@@ -39,6 +39,7 @@ $(function(){
   });
 });
 
+/*Parsing new Documents*/
 $(function(){
   $("#Parse").click(function(){
     $("#admin-tools> label").show();
@@ -48,15 +49,85 @@ $(function(){
       type: "POST",
       url:  "parsefiles.php",
       data: dataString,
-      cache:  true,
+      cache:  false,
       success: function(data){
         $("#admin-tools> label").html(data).fadeOut(4000);
+      }
+    });
+  });
+});
+
+
+/*update the active Documents*/
+$(function(){
+  $("button[name='hide']").click(function(){
+    $("#message").show();
+    var arr={};
+    var active =1;
+     $("input[change='1']").each(function(){
+        active =1;
+        if($(this).attr('checked')== "checked"){active = 0;}
+        arr[$(this).val()] = active;
+    });
+
+    $.ajax({
+      type: "POST",
+      url:  "hideDocuments.php",
+      data: {documents:arr},
+      cache:  true,
+      success: function(data){
+        $("#message").html(data).fadeOut(6000);
       }
     });
     return false;
   });
 });
+/*checkbox click listener*/
+$(document).ready(function(){
+$("input[name='documents[]']").click(function(){
+  if($(this).attr('change') == '1'){
+      $(this).attr('change',"0");
+  }else{
+    $(this).attr('change','1');
+  }
+  if($(this).attr('checked')== "checked"){
+      $(this).removeAttr('checked');
+  }else{
+    $(this).attr('checked', true);
+  }
+});
+});
 
+/*main search */
+$(function(){
+  $("#wildSearch").submit(function(){
+    var search = $("#wildcard").val();
+    search=search.trim();
+    //search=search.replace(/\s\s+/g, ' ');
+    search = search.replace("*","%");
+    search=search.toLowerCase();
+    console.log("search= "+search);
+    // var dataString ='search=' + search;
+    //localStorage.setItem('searchQ',search);
+
+    $.ajax({
+      type: "POST",
+      url:  "actionSearch.php",
+      data: {search:search},
+      cache:  true,
+      success: function(data){
+        $("#result").html(data);
+        // $(function(){
+        //   $('a').click(function(e){
+        //     // e.preventDefault();
+        //     highlight(search);
+        //   });
+        // });
+      }
+    });
+    return false;
+  });
+});
 
 
 
