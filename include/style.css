@@ -167,3 +167,7 @@ button:focus{
   .hide-document button{
       margin-left: 15px;
   }
+  #message{
+    display: block;
+    color: red;
+  }
