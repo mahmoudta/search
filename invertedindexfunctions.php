@@ -152,5 +152,6 @@
     }
     //testranking();
     //simplesearch(array('will','act','a','all'));
-    simplesearch(array('will','act','"a"','all'));
+    //simplesearch(array('will','act','"a"','all'));
+    //simplesearch(array('kill','act','"a"','all'));
 ?>
