@@ -61,7 +61,6 @@ $(function(){
 /*update the active Documents*/
 $(function(){
   $("button[name='hide']").click(function(){
-    $("#message").show();
     var arr={};
     var active =1;
      $("input[change='1']").each(function(){
@@ -76,6 +75,7 @@ $(function(){
       data: {documents:arr},
       cache:  true,
       success: function(data){
+        $("#message").show();
         $("#message").html(data).fadeOut(6000);
       }
     });
