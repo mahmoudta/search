@@ -111,6 +111,7 @@ while($row = mysqli_fetch_array($result)){
 }
 ?>
 <button class="btn btn-danger" class="col-md-1 col-md-offset-1" type="submit" name="hide"> hide document</button>
+<span id="message"></span>
  </form>
    <hr>
 </div>
@@ -124,11 +125,11 @@ while($row = mysqli_fetch_array($result)){
     </div>
 </form>
 
-<form class="form form-inline" action="">
+<form class="form form-inline" id="wildSearch" action="" method="post">
   <div class="form-group col-xs-12">
     <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
     <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">
-      <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+      <button type="submit" name"wildsearch" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
   </div>
 </form>
 </div>

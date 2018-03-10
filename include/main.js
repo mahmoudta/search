@@ -49,19 +49,19 @@ $(function(){
       type: "POST",
       url:  "parsefiles.php",
       data: dataString,
-      cache:  true,
+      cache:  false,
       success: function(data){
         $("#admin-tools> label").html(data).fadeOut(4000);
       }
     });
-    return false;
   });
 });
 
 
-/*ipdate the active Documents*/
+/*update the active Documents*/
 $(function(){
   $("button[name='hide']").click(function(){
+    $("#message").show();
     var arr={};
     var active =1;
      $("input[change='1']").each(function(){
@@ -76,13 +76,13 @@ $(function(){
       data: {documents:arr},
       cache:  true,
       success: function(data){
-        console.log(data);
+        $("#message").html(data).fadeOut(6000);
       }
     });
     return false;
   });
 });
-
+/*checkbox click listener*/
 $(document).ready(function(){
 $("input[name='documents[]']").click(function(){
   if($(this).attr('change') == '1'){
@@ -97,6 +97,38 @@ $("input[name='documents[]']").click(function(){
   }
 });
 });
+
+/*main search */
+$(function(){
+  $("#wildSearch").submit(function(){
+    var search = $("#wildcard").val();
+    search=search.trim();
+    //search=search.replace(/\s\s+/g, ' ');
+    search = search.replace("*","%");
+    search=search.toLowerCase();
+    console.log("search= "+search);
+    // var dataString ='search=' + search;
+    //localStorage.setItem('searchQ',search);
+
+    $.ajax({
+      type: "POST",
+      url:  "actionSearch.php",
+      data: {search:search},
+      cache:  true,
+      success: function(data){
+        $("#result").html(data);
+        // $(function(){
+        //   $('a').click(function(e){
+        //     // e.preventDefault();
+        //     highlight(search);
+        //   });
+        // });
+      }
+    });
+    return false;
+  });
+});
+
 
 
 $(document).ready(function(){
