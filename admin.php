@@ -7,25 +7,8 @@ session_start();
     header('location:'.URL);
     exit();
 }
-if($_GET['parse']){getfiles();}
-function getfiles(){
-$dir = getcwd().'/source'.'/';
-$files = scandir($dir);
-$size =count($files);
-$cleanarray = [];
-foreach ($files as $key => $value) {
-  if($value !="." && $value != ".." && $value != ".DS_Store"){
-    $cleanarray[] = 'source/'.$value;
-  }
-}
-if($cleanarray){
-buildInvertedIndex($cleanarray);
-}else{
-  echo "No Files To add";
-}
-}
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,68 +34,117 @@ buildInvertedIndex($cleanarray);
 <body>
 
 <header>
-  <nav>
-    <div class="brand">
-        <span>Search Engine</span>
-    </div>
-    <div class="form">
-      <form action=" " method="post" id="search-post">
-        <div class="form-inputs">
-        <input class="form-control" type="text" id="search" placeholder="Search here">
-        <button class="btn btn-default" type="submit" name="search-button">
-          <span class="glyphicon glyphicon-search"></span>
-        </button>
+  <div class="container-fluid">
+    <nav>
+      <div class="brand">
+          <span>Search Engine</span>
       </div>
-      </form>
-    </div>
-    <div class="user">
-      <?php
-      if(!isset($_SESSION['user'])){
-        echo '<button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Log in</button>';
-      }else{
-        echo '<button name="sign-out-button"><span class="glyphicon glyphicon-log-in"></span> Log out</button>';
-      }
-       ?>
-    </div>
-    <div class="sign-in">
-      <form class="form-horizontal" action="/" method="post">
-        <div class="form-group row ">
-          <label class="control-label col-sm-3" for="username">Username:</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" placeholder="Enter username" name="username">
-          </div>
+      <div class="myform">
+        <form action=" " method="post" id="search-post">
+          <div class="form-inputs">
+          <input class="form-control" type="text" id="search" placeholder="Search here">
+          <button class="btn btn-default" type="submit" name="search-button">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
         </div>
-        <div class="form-group row">
-          <label class="control-label col-sm-3" for="password">Password:</label>
-          <div class="col-sm-8">
-            <input type="password" class="form-control"  placeholder="Enter password" name="password">
+        </form>
+      </div>
+      <div class="user">
+        <?php
+        if(!isset($_SESSION['user'])){
+          echo '<button name="sign-in-button"><span class="glyphicon glyphicon-log-in"></span> Log in</button>';
+        }else{
+          echo '<button name="sign-out-button"><span class="glyphicon glyphicon-log-in"></span> Log out</button>';
+        }
+         ?>
+      </div>
+      <div class="sign-in">
+        <form class="form-horizontal" action="/" method="post">
+          <div class="form-group row ">
+            <label class="control-label col-sm-3" for="username">Username:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Enter username" name="username">
+            </div>
           </div>
-        </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="password">Password:</label>
+            <div class="col-sm-8">
+              <input type="password" class="form-control"  placeholder="Enter password" name="password">
+            </div>
+          </div>
 
-        <div class="form-group row ">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Submit</button>
+          <div class="form-group row ">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">Submit</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+    </nav>
+    <div class="advanced-search">
+      <button id="advanced">Admin advanced Tools</button>
     </div>
-  </nav>
-  <div class="advanced-search">
-    <button >Advanced Search</button>
   </div>
+
 </header>
-  <body>
-<div class="container">
-  <button type="button" id="Parse" name="Parse" onclick='location.href="?parse=1"'> Parse new files</button>
-  <div id="files">
+<body>
+  <div class="container">
+<div class="col-xs-12 " id="advanced_tools">
+  <span>Tools:</span>
+  <div class="col-xs-12" id="admin-tools">
+  <button class="btn btn-primary" type="button" id="Parse" name="Parse"> Parse new files</button>
+  <label></label>
+  <div class="col-xs-12 hide-document">
+  <span><b>check the documents you want to hide:</b></span>
+  <form>
+<?php
+$query = "SELECT documents.R_id, documents.name FROM documents";
+$result = mysqli_query($dbc, $query);
+while($row = mysqli_fetch_array($result)){
+  echo '<label class="checkbox-inline">';
+    echo'<input type="checkbox" value="'.$row[R_id].'">'.$row['name'];
+  echo'</label>';
+}
+?>
+<button class="btn btn-danger" class="col-md-1 col-md-offset-1" type="submit" name="hide"> hide document</button>
+ </form>
+   <hr>
+</div>
+</div>
+<span>Advanced Search:</span>
+  <form class="form form-inline" action="">
+    <div class="form-group col-xs-12">
+      <label class="col-xs-3" for="operand">OPERANDS SEARCH:</label>
+      <input type="text" class="form-control col-xs-6" id="operand" name="operand" placeholder=" ( term And term ) OR term">
+        <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+    </div>
+</form>
+
+<form class="form form-inline" action="">
+  <div class="form-group col-xs-12">
+    <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
+    <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">
+      <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+  </div>
+</form>
+</div>
+
+  <div id="result">
   </div>
 </div>
 
 
-
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="include/js/bootstrap.min.js"></script>
 <script src="include/main.js"></script>
+
+
+<?php
+mysqli_free_result($result);
+
+mysqli_close($dbc);
+?>
   </body>
 </html>

@@ -37,6 +37,27 @@ $(function(){
   });
 });
 
+$(function(){
+  $("#Parse").click(function(){
+    $("#admin-tools> label").show();
+    var dataString ='parse=1';
+
+    $.ajax({
+      type: "POST",
+      url:  "parsefiles.php",
+      data: dataString,
+      cache:  true,
+      success: function(data){
+        $("#admin-tools> label").html(data).fadeOut(4000);
+      }
+    });
+    return false;
+  });
+});
+
+
+
+
 $(document).ready(function(){
   $("#advanced").click(function(){
     $("#advanced_tools").slideToggle("fast");
