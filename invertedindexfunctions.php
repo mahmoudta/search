@@ -1,6 +1,6 @@
 <?php
 
-    function lookupWord($word,$without)
+    function lookupWord($word,$searchin)
     {
         include 'connect.php';
         $empty=0;
@@ -137,7 +137,7 @@
         }
         
         $array=search($newwordlist);
-        print_r ($array);
+        //print_r ($array);
         return $array;
     }
     function advancedsearch(){
@@ -152,5 +152,5 @@
     }
     //testranking();
     //simplesearch(array('will','act','a','all'));
-    //simplesearch(array('will','act','"a"','all'));
+    simplesearch(array('will','act','"a"','all'));
 ?>
