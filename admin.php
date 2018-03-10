@@ -96,13 +96,17 @@ session_start();
   <label></label>
   <div class="col-xs-12 hide-document">
   <span><b>check the documents you want to hide:</b></span>
-  <form>
+  <form action="" method="post">
 <?php
-$query = "SELECT documents.R_id, documents.name FROM documents";
+$query = "SELECT documents.R_id, documents.name, documents.active FROM documents";
 $result = mysqli_query($dbc, $query);
 while($row = mysqli_fetch_array($result)){
   echo '<label class="checkbox-inline">';
-    echo'<input type="checkbox" value="'.$row[R_id].'">'.$row['name'];
+    if($row['active']==1){
+    echo'<input name="documents[]" type="checkbox" change="0" value="'.$row[R_id].' ">'.$row['name'];
+  }else{
+    echo'<input name="documents[]" type="checkbox" checked="true" change="0" value="'.$row[R_id].'">'.$row['name'];
+  }
   echo'</label>';
 }
 ?>
