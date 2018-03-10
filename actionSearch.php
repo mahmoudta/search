@@ -1,6 +1,6 @@
 <?php
 include 'connect.php';
-include 'invertedindexfunctions.php'
+// include 'invertedindexfunctions.php'
 
 $data = explode(",", $_POST['search']);
 //simplesearch($data);

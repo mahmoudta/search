@@ -39,6 +39,7 @@ $(function(){
   });
 });
 
+/*Parsing new Documents*/
 $(function(){
   $("#Parse").click(function(){
     $("#admin-tools> label").show();
@@ -58,6 +59,44 @@ $(function(){
 });
 
 
+/*ipdate the active Documents*/
+$(function(){
+  $("button[name='hide']").click(function(){
+    var arr={};
+    var active =1;
+     $("input[change='1']").each(function(){
+        active =1;
+        if($(this).attr('checked')== "checked"){active = 0;}
+        arr[$(this).val()] = active;
+    });
+
+    $.ajax({
+      type: "POST",
+      url:  "hideDocuments.php",
+      data: {documents:arr},
+      cache:  true,
+      success: function(data){
+        console.log(data);
+      }
+    });
+    return false;
+  });
+});
+
+$(document).ready(function(){
+$("input[name='documents[]']").click(function(){
+  if($(this).attr('change') == '1'){
+      $(this).attr('change',"0");
+  }else{
+    $(this).attr('change','1');
+  }
+  if($(this).attr('checked')== "checked"){
+      $(this).removeAttr('checked');
+  }else{
+    $(this).attr('checked', true);
+  }
+});
+});
 
 
 $(document).ready(function(){
