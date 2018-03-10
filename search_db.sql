@@ -29,6 +29,7 @@ CREATE TABLE `documents` (
   `name` varchar(45) NOT NULL,
   `title` varchar(100) DEFAULT NULL,
   `description` varchar(250) DEFAULT NULL,
+  `active` tinyint(4) DEFAULT '1',
   PRIMARY KEY (`R_id`),
   UNIQUE KEY `R_id_UNIQUE` (`R_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
@@ -41,7 +42,7 @@ CREATE TABLE `documents` (
 
 LOCK TABLES `documents` WRITE;
 /*!40000 ALTER TABLE `documents` DISABLE KEYS */;
-INSERT INTO `documents` VALUES (1,'data/doc1.html','THE TREE OF LIFE','\n    THE MASTER said:\n    ‘I have planted the Seed of a Tree,\n    It shall be strangely fed\n    With white dew and with red,\n    And the Gardeners shall be three--\n    Regret, Hope, Memory!’'),(2,'data/doc2.html','MUSIC ON CHRISTMAS MORNING','\n    MUSIC I love--but never strain\n    Could kindle raptures so divine,\n    So grief assuage, so conquer pain,\n    And rouse this pensive heart of mine--\n    As that we hear on Christmas morn,\n    Upon the wintry breezes borne.'),(3,'data/doc3.html','ZUDORA-(from \"Turns and Movies\")','\n  HERE on the pale beach, in the darkness;\n    With the full moon just to rise;\n    They sit alone, and look over the sea,\n    Or into each other\'s eyes. . .\n');
+INSERT INTO `documents` VALUES (1,'data/doc1.html','THE TREE OF LIFE','\n    THE MASTER said:\n    ‘I have planted the Seed of a Tree,\n    It shall be strangely fed\n    With white dew and with red,\n    And the Gardeners shall be three--\n    Regret, Hope, Memory!’',1),(2,'data/doc2.html','MUSIC ON CHRISTMAS MORNING','\n    MUSIC I love--but never strain\n    Could kindle raptures so divine,\n    So grief assuage, so conquer pain,\n    And rouse this pensive heart of mine--\n    As that we hear on Christmas morn,\n    Upon the wintry breezes borne.',1),(3,'data/doc3.html','ZUDORA-(from \"Turns and Movies\")','\n  HERE on the pale beach, in the darkness;\n    With the full moon just to rise;\n    They sit alone, and look over the sea,\n    Or into each other\'s eyes. . .\n',1);
 /*!40000 ALTER TABLE `documents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,4 +131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-09 23:18:49
+-- Dump completed on 2018-03-10 14:43:44
