@@ -3,7 +3,7 @@ include 'connect.php';
 include 'invertedindexfunctions.php'
 
 $data = explode(",", $_POST['search']);
-simplesearch($data);
+//simplesearch($data);
 foreach($data as $d){
      echo $d."<br>";
 }
