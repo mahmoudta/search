@@ -10,18 +10,20 @@ $(document).ready(function(){
   });
 });
 
-
+/*main search */
 $(function(){
   $("#search-post").submit(function(){
     var search = $("#search").val().toLowerCase();
-    var dataString ='search=' + search;
+    search=search.trim();
+    search=search.replace(/\s\s+/g, ' ');
+    search = search.split(" ").join(",");
+    // var dataString ='search=' + search;
     localStorage.setItem('searchQ',search);
-    console.log(dataString);
 
     $.ajax({
       type: "POST",
       url:  "actionSearch.php",
-      data: dataString,
+      data: {search:search},
       cache:  true,
       success: function(data){
         $("#result").html(data);
