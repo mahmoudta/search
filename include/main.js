@@ -51,7 +51,6 @@ $(function(){
   $("#Parse").click(function(){
     $("#admin-tools> label").show();
     var dataString ='parse=1';
-
     $.ajax({
       type: "POST",
       url:  "parsefiles.php",
@@ -115,7 +114,6 @@ $(function(){
     search = search.replace(/[*]/g,"%");
     search=search.toLowerCase();
     var qsearch = search.replace(/[%]/g,"").replace(/[,]/g,' ');
-    alert(qsearch);
     localStorage.setItem('searchQ',qsearch);
 
     $.ajax({

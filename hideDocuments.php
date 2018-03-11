@@ -7,6 +7,8 @@ if(isset($_POST['documents'])){
      $result = mysqli_query($dbc, $query);
      $count++;
   }
-  echo $count." Document/s has been updated";
+    echo $count." Document/s has been updated";  
 }
+mysqli_close($dbc);
+
 ?>

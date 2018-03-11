@@ -96,7 +96,7 @@ session_start();
   <label></label>
   <div class="col-xs-12 hide-document">
   <span><b>check the documents you want to hide:</b></span>
-  <form action="" method="post">
+  <form action="" method="post" id="hiding">
 <?php
 $query = "SELECT documents.R_id, documents.name, documents.active FROM documents";
 $result = mysqli_query($dbc, $query);
@@ -117,20 +117,20 @@ while($row = mysqli_fetch_array($result)){
 </div>
 </div>
 <span>Advanced Search:</span>
-  <form class="form form-inline" action="">
-    <div class="form-group col-xs-12">
-      <label class="col-xs-3" for="operand">OPERANDS SEARCH:</label>
-      <input type="text" class="form-control col-xs-6" id="operand" name="operand" placeholder=" ( term And term ) OR term">
-        <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
-    </div>
+<form class="form form-inline" action="" method="post" id="advancedsearch">
+  <div class="form-group col-xs-12">
+    <label class="col-xs-3" for="operand">OPERANDS SEARCH:</label>
+    <input type="text" class="form-control col-xs-6" id="operand" name="operand" placeholder=" ( term And term ) OR term">
+      <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+  </div>
 </form>
 
-<form class="form form-inline" id="wildSearch" action="" method="post">
-  <div class="form-group col-xs-12">
-    <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
-    <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">
-      <button type="submit" name"wildsearch" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
-  </div>
+<form class="form form-inline" method="post" id="wildSearch" action="">
+<div class="form-group col-xs-12">
+  <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
+  <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">
+    <button type="submit" class="btn btn-default col-xs-2 col-xs-offset-1">Search</button>
+</div>
 </form>
 </div>
 
@@ -138,9 +138,7 @@ while($row = mysqli_fetch_array($result)){
   </div>
 </div>
 
-<footer>
-  <h5>help</h5>
-</footer>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
