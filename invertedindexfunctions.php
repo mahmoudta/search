@@ -31,12 +31,14 @@ $temp=[];
         // $solve = array_merge(arr)
       }
     }
-    print_r($temp."<br>");
-    $newarray = array_merge(array_slice($copy,0,$start,true),$temp,array_slice($copy,$end+1,count($copy),true));
+    print_r($temp);
+    echo "<br>";
+    $newarray = array_merge(array_slice($copy,0,$start,true),$temp);
     $copy = array_merge($newarray,array_slice($copy,$end+1,count($copy),true));
     print_r ($copy);
   return $copy;
 }
+
     function andfunc($arr1,$arr2){
         return array_intersect($arr1,$arr2);
     }
