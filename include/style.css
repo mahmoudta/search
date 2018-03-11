@@ -171,3 +171,12 @@ button:focus{
     display: block;
     color: red;
   }
+  footer{
+    background-color: #fff;
+    border-color: #080808;
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }

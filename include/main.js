@@ -18,7 +18,14 @@ $(function(){
     search=search.replace(/\s\s+/g, ' ');
     search = search.split(" ").join(",");
     // var dataString ='search=' + search;
-    localStorage.setItem('searchQ',search);
+    var qsearch = search.replace(/"/g, "");
+    qsearch = qsearch.replace(/'/g, "");
+    qsearch = qsearch.trim();
+    var temp = new Array();
+    temp = qsearch.split(',');
+    console.log(temp);
+
+    localStorage.setItem('searchQ',temp);
 
     $.ajax({
       type: "POST",
@@ -135,5 +142,39 @@ $(document).ready(function(){
   $("#advanced").click(function(){
     $("#advanced_tools").slideToggle("fast");
     $(".myform").toggle();
+  });
+});
+
+
+
+
+
+$(function(){
+  $("#advancedsearch").submit(function(){
+
+    var expression = $("#operand").val();
+    expression = expression.replace(/AND/g," * ").replace(/OR/g," + ").replace(/NOT/g," - ");
+    expression=expression.trim();
+    expression=expression.replace(/\s+/g, ' ');
+    expression=expression.toLowerCase();
+    var start=0,end =0;
+    var start=expression.indexOf("(");
+    var end = expression.indexOf(")");
+    var first = expression.substring(start+1,end);
+    if(start>=0 && end>0)
+      expression =expression.substring(0,start)+expression.slice(start+1,end).replace(/\s/g,'')+expression.substring(end+1,expression.length);
+    expression=expression.replace(/\s/g,",");
+    var advancedsearch = "advancedsearch="+expression;
+
+    $.ajax({
+      type: "POST",
+      url:  "actionSearch.php",
+      data: advancedsearch,
+      cache:  true,
+      success: function(data){
+        $("#result").html(data);
+      }
+    });
+    return false;
   });
 });
