@@ -203,21 +203,14 @@
     }
     
     function advancedsearch($strings){
-        echo $strings;
-        $totaldocs=alldoclist();
-        //print_r($totaldocs);
-        $sring="(act OR tree) AND NOT will";
-        $output=str_replace("OR","+",$sring,$i);
-        $output=str_replace("AND","*",$output,$i);
-        $output=str_replace("NOT ","'",$output,$i);
-        //echo $output."<br>";
-        preg_match_all('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)(\d+)/',$output,$outputs );
-        //print_r($outputs);
-        $arr1=inwichfils('act');
-        $arr2=inwichfils('tree');
-       //print_r(andfunc($arr1,$arr2));
-       // echo "<br><br>";
-        //print_r(orfunc($arr1,$arr2));
+        
+        //$totaldocs=alldoclist();
+        foreach($strings as key $string){
+            //echo $string;
+        }
+        
+        //$arr1=inwichfils('act');
+        //$arr2=inwichfils('tree');
         
     }
     
