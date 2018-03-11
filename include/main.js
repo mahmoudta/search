@@ -89,6 +89,7 @@ $(function(){
     return false;
   });
 });
+
 /*checkbox click listener*/
 $(document).ready(function(){
 $("input[name='documents[]']").click(function(){
@@ -105,31 +106,25 @@ $("input[name='documents[]']").click(function(){
 });
 });
 
-/*main search */
+/*wildcard search search */
 $(function(){
   $("#wildSearch").submit(function(){
     var search = $("#wildcard").val();
     search=search.trim();
-    //search=search.replace(/\s\s+/g, ' ');
-    search = search.replace("*","%");
+    search=search.replace(/\s+/g, ',');
+    search = search.replace(/[*]/g,"%");
     search=search.toLowerCase();
-    console.log("search= "+search);
-    // var dataString ='search=' + search;
-    //localStorage.setItem('searchQ',search);
+    var qsearch = search.replace(/[%]/g,"").replace(/[,]/g,' ');
+    alert(qsearch);
+    localStorage.setItem('searchQ',qsearch);
 
     $.ajax({
       type: "POST",
       url:  "actionSearch.php",
-      data: {search:search},
+      data: {wildcard:search},
       cache:  true,
       success: function(data){
         $("#result").html(data);
-        // $(function(){
-        //   $('a').click(function(e){
-        //     // e.preventDefault();
-        //     highlight(search);
-        //   });
-        // });
       }
     });
     return false;
@@ -164,12 +159,12 @@ $(function(){
     if(start>=0 && end>0)
       expression =expression.substring(0,start)+expression.slice(start+1,end).replace(/\s/g,'')+expression.substring(end+1,expression.length);
     expression=expression.replace(/\s/g,",");
-    var advancedsearch = "advancedsearch="+expression;
+    // var advancedsearch = "advancedsearch="+expression;
 
     $.ajax({
       type: "POST",
       url:  "actionSearch.php",
-      data: advancedsearch,
+      data: {advancedsearch:expression},
       cache:  true,
       success: function(data){
         $("#result").html(data);

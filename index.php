@@ -101,7 +101,7 @@ if(!empty($_POST["username"])){
     </div>
 </form>
 
-<form class="form form-inline" action="">
+<form class="form form-inline" method="post" id="wildSearch" action="">
   <div class="form-group col-xs-12">
     <label class="col-xs-3" for="wildcard">WILDCARD SEARCH:</label>
     <input type="text" class="form-control col-xs-6" id="wildcard" name="wildcard" placeholder=" term*">

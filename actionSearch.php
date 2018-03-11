@@ -1,15 +1,21 @@
 <?php
 include 'invertedindexfunctions.php';
 
-if(!empty($_POST['search'])){
+if(isset($_POST['search'])){
   $data_array = explode(",", $_POST['search']);
-  simplesearch($data_array);
+  // simplesearch($data_array);
   printResult(simplesearch($data_array),$data_array);
 }
 
-if(!empty($_POST['advancedsearch'])){
+if(isset($_POST['advancedsearch'])){
   $data_array = explode(",", $_POST['advancedsearch']);
+  echo $data_array;
   printResult(advancedsearch($data_array),$data_array);
+}
+
+if(isset($_POST['advancedsearch'])){
+  $data_array = explode(",", $_POST['advancedsearch']);
+  printResult(wildecard($data_array),$data_array);
 }
 
 function printResult($result,$search){
