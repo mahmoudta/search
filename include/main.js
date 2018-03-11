@@ -51,16 +51,20 @@ $(function(){
   $("#Parse").click(function(){
     $("#admin-tools> label").show();
     var dataString ='parse=1';
-
     $.ajax({
       type: "POST",
       url:  "parsefiles.php",
       data: dataString,
       cache:  false,
       success: function(data){
+        if(data == 'No documents To add'){
         $("#admin-tools> label").html(data).fadeOut(4000);
+      }else{
+        $("#hiding").html(data);
+      }
       }
     });
+    return false;
   });
 });
 
@@ -115,7 +119,6 @@ $(function(){
     search = search.replace(/[*]/g,"%");
     search=search.toLowerCase();
     var qsearch = search.replace(/[%]/g,"").replace(/[,]/g,' ');
-    alert(qsearch);
     localStorage.setItem('searchQ',qsearch);
 
     $.ajax({
@@ -152,6 +155,7 @@ $(function(){
     expression=expression.trim();
     expression=expression.replace(/\s+/g, ' ');
     expression=expression.toLowerCase();
+    var send = expression;
     var start=0,end =0;
     var start=expression.indexOf("(");
     var end = expression.indexOf(")");
@@ -164,7 +168,7 @@ $(function(){
     $.ajax({
       type: "POST",
       url:  "actionSearch.php",
-      data: {advancedsearch:expression},
+      data: {advancedsearch:expression,send},
       cache:  true,
       success: function(data){
         $("#result").html(data);

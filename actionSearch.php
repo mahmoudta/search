@@ -9,11 +9,11 @@ if(isset($_POST['search'])){
 
 if(isset($_POST['advancedsearch'])){
   $data_array = explode(",", $_POST['advancedsearch']);
-  printResult(advancedsearch($data_array),$data_array);
+  printResult(advancedsearch($data_array,$_POST['send']),$data_array);
 }
 
-if(isset($_POST['advancedsearch'])){
-  $data_array = explode(",", $_POST['advancedsearch']);
+if(isset($_POST['wildcard'])){
+  $data_array = explode(",", $_POST['wildcard']);
   printResult(wildecard($data_array),$data_array);
 }
 
@@ -27,12 +27,13 @@ function printResult($result,$search){
 
   }else{
       foreach ($result[0] as $key => $value) {
-          echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a href="'.$result[1][$key]['name'].'"><h3>';
+          echo '<div class="col-xs-12 col-md-7 col-md-offset-2"><a target="_blank" href="'.$result[1][$key]['name'].'"><h3>';
           echo $result[1][$key]['title']."</h3></a><p>".$result[1][$key]['description']."</p></div>";
       }
 }/*else*/
 }
 
-
+mysqli_free_result($result);
+mysqli_close($dbc);
 
 ?>
