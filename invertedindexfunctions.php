@@ -27,7 +27,7 @@
             return array_keys($alldocs);
         }else{
             $dbc->close();
-            return false;
+            return [];
         }
         
     }
@@ -201,20 +201,91 @@
     function orfunc($arr1,$arr2){
         return array_unique(array_merge($arr1,$arr2), SORT_REGULAR);
     }
+    function notfunc($totaldocs,$arr){
+        return array_diff($totaldocs,$arr);
+    }
     
-    function advancedsearch($strings){
-        
-        //$totaldocs=alldoclist();
-        foreach($strings as $key=>$string){
-            echo $string;
-        }
-        
-        //$arr1=inwichfils('act');
-        //$arr2=inwichfils('tree');
+    
+    function checker($totaldocs,$lastval,$laststr,$string,$nextstr){
+        // ( ($lastval!=-1) || ($string!='-') )&&($nextstr!='-')
+//        if(1){
+            switch ($string) {
+                case "+":
+                    if(!empty($lastval)){
+
+                        return orfunc($lastval,inwichfils($nextstr));
+                    }else{
+
+                        return orfunc(inwichfils($laststr),inwichfils($nextstr));
+                    }
+                    break;
+                case "-":
+                        if($laststr=='+')
+                            return orfunc($lastval,notfunc($totaldocs,inwichfils($nextstr)));
+                        else if($laststr=='*')
+                            return andfunc($lastval,notfunc($totaldocs,inwichfils($nextstr)));
+                        break;
+                case "*":
+                    if(!empty($lastval))
+                        return andfunc($lastval,inwichfils($nextstr));
+                    else
+                        return andfunc(inwichfils($laststr),inwichfils($nextstr));
+                        break;
+                default:
+                    if( ((strpos($string,'*') )!=FALSE) || ((strpos($string,'+') )!=FALSE) || ((strpos($string,'-') )!=FALSE))
+                        return call($totaldocs,stringfillter($string));
+                    else if(!empty($lastval))
+                    return $lastval;
+                    
+                    //return call($totaldocs,stringfillter($string));
+//                    else if(empty($lastval))
+//                        return inwichfils($string);
+//                        else
+//                            return $lastval;
+                        break;
+            }
+//        }
+//        else if( (empty($lastval)) && ($string=='-') )
+//            return notfunc($totaldocs,$nextstr);
+//        else if (empty($lastval))
+//            return inwichfils($string);
+//
+    }
+    function stringfillter($string){
         
     }
     
-    //advancedsearch();
+    function call($totaldocs,$strings){
+       $maxkey=count($strings)-1;
+        $lastval=[];
+        if($maxkey>0){
+            foreach($strings as $key=>$string){
+                switch ($key) {
+                    case 0:
+                        break;
+                    case $maxkey:
+                        break;
+                    default:
+                        $lasttmp=$key-1;
+                        $nexttmp=$key+1;
+                        $lastval=checker($totaldocs,$lastval,$strings[$lasttmp],$string,$strings[$nexttmp]);
+                        break;
+                }
+            }
+
+        }
+        return $lastval;
+    }
+    function advancedsearch($strings,$long){
+        //print_r ($strings);
+        echo "<br>";
+        $totaldocs=alldoclist();
+        call($totaldocs,$strings);
+        
+    }
+    
+    advancedsearch(['act','+','hit','+','tree'],'act + hit + tree');
+    
     function wildecard($words){
         $allwords=[];
         foreach($words as $word){
