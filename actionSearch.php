@@ -9,7 +9,6 @@ if(isset($_POST['search'])){
 
 if(isset($_POST['advancedsearch'])){
   $data_array = explode(",", $_POST['advancedsearch']);
-  echo $data_array;
   printResult(advancedsearch($data_array),$data_array);
 }
 
