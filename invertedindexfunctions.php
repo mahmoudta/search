@@ -205,8 +205,8 @@
     function advancedsearch($strings){
         
         //$totaldocs=alldoclist();
-        foreach($strings as key $string){
-            //echo $string;
+        foreach($strings as $key=>$string){
+            echo $string;
         }
         
         //$arr1=inwichfils('act');
