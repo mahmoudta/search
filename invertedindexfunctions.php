@@ -1,5 +1,61 @@
 <?php
-
+    
+    function inwichfils($word){
+        include 'connect.php';
+        $empty=0;
+        $query = "SELECT id FROM `invertedindex` WHERE word='".$word."'";
+        $result = mysqli_query($dbc, $query);
+        $row = mysqli_fetch_array($result);
+        if(is_array($row)){
+            $currentid = $row['id'];
+        }else{
+            $empty=1;
+        }
+        
+        if($empty==0){
+            $alldocs=[];
+            $query1 = "SELECT postingfile.fileid
+            FROM postingfile
+            INNER JOIN documents ON postingfile.wordid=$currentid AND documents.active=1 ";
+            $result1 = mysqli_query($dbc, $query1);
+            while($row1 = mysqli_fetch_array($result1,MYSQLI_ASSOC)){
+                $alldocs[$row1['fileid']]=$row1['fileid'];
+                
+            }
+            $dbc->close();
+            
+            return array_keys($alldocs);
+        }else{
+            $dbc->close();
+            return false;
+        }
+        
+    }
+    function alldoclist(){
+        include 'connect.php';
+        $totaldocs=[];
+        $query = "SELECT R_id FROM documents where active=1";
+        $result1 = mysqli_query($dbc, $query);
+        while($row1 = mysqli_fetch_array($result1,MYSQLI_ASSOC)){
+            $totaldocs[]=$row1['R_id'];
+        }
+        $dbc->close();
+        return $totaldocs;
+    }
+    
+    function relativewords($word){
+        include 'connect.php';
+        $words=[];
+        $query = "SELECT word FROM invertedindex
+        WHERE word LIKE '".$word."'";
+        $result1 = mysqli_query($dbc, $query);
+        while($row1 = mysqli_fetch_array($result1,MYSQLI_ASSOC)){
+            $words[]=$row1['word'];
+        }
+        $dbc->close();
+        return $words;
+    }
+    
     function lookupWord($word,$searchin)
     {
         include 'connect.php';
@@ -107,7 +163,6 @@
         //$allresult of each word with the file list and its weight
         //$alldocs list of all the used docs
         //$wordsweight the weight of each word in Query
-        //array_keys($newalldocs);
 
         $ranked=ranking($allresult,array_keys($newalldocs),$wordsweight);
         $array=array(0=>$ranked,1=>$newalldocs);
@@ -137,21 +192,49 @@
         }
         
         $array=search($newwordlist);
-        //print_r ($array);
         return $array;
     }
-    function advancedsearch(){
-        
+    
+    function andfunc($arr1,$arr2){
+        return array_intersect($arr1,$arr2);
+    }
+    function orfunc($arr1,$arr2){
+        return array_unique(array_merge($arr1,$arr2), SORT_REGULAR);
+    }
+    
+    function advancedsearch($strings){
+        $totaldocs=alldoclist();
+        //print_r($totaldocs);
+        $sring="(act OR tree) AND NOT will";
+        $output=str_replace("OR","+",$sring,$i);
+        $output=str_replace("AND","*",$output,$i);
+        $output=str_replace("NOT ","'",$output,$i);
+        //echo $output."<br>";
+        preg_match_all('/(\d+)(?:\s*)([\+\-\*\/])(?:\s*)(\d+)/',$output,$outputs );
+        //print_r($outputs);
+        $arr1=inwichfils('act');
+        $arr2=inwichfils('tree');
+       //print_r(andfunc($arr1,$arr2));
+       // echo "<br><br>";
+        //print_r(orfunc($arr1,$arr2));
         
     }
-    function testranking(){
-        $allresult=array('life'=>array(1=>0.140550715,2=>0.200786736),'learning'=>array(1=>0.140550715,3=>0.468502384));
-            $alldocs=array(0=>1,1=>2,2=>3);
-            $wordsweight=array('life'=>0.702753576,'learning'=>0.702753576);
-        ranking($allresult,$alldocs,$wordsweight);
+    
+    //advancedsearch();
+    function wildecard($words){
+        $allwords=[];
+        foreach($words as $word){
+            if(strpos($word,'%')!=FALSE)
+                $allwords=array_unique(array_merge($allwords,relativewords($word)), SORT_REGULAR);
+            else
+                $allwords=array_unique(array_merge($allwords,array($word)), SORT_REGULAR);
+        }
+        $array=simplesearch($allwords);
+        return $array;
     }
-    //testranking();
-    //simplesearch(array('will','act','a','all'));
-    //simplesearch(array('will','act','"a"','all'));
-    //simplesearch(array('kill','act','"a"','all'));
+
+    //simplesearch(array('will','act','his','all'));
+    //simplesearch(array('will','act','"his"','all'));
+    //simplesearch(array('hit','act','"his"','all'));
+    //wildecard(array('ac%','act','"all"','hit','will'));
 ?>
