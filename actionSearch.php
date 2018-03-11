@@ -9,7 +9,7 @@ if(isset($_POST['search'])){
 
 if(isset($_POST['advancedsearch'])){
   $data_array = explode(",", $_POST['advancedsearch']);
-  printResult(advancedsearch($data_array),$data_array);
+  printResult(advancedsearch($data_array,$_POST['send']),$data_array);
 }
 
 if(isset($_POST['wildcard'])){
