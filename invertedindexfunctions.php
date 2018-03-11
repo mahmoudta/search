@@ -203,6 +203,7 @@
     }
     
     function advancedsearch($strings){
+        echo $strings;
         $totaldocs=alldoclist();
         //print_r($totaldocs);
         $sring="(act OR tree) AND NOT will";
@@ -225,9 +226,9 @@
         $allwords=[];
         foreach($words as $word){
             if(strpos($word,'%')!=FALSE)
-                $allwords=array_unique(array_merge($allwords,relativewords($word)), SORT_REGULAR);
+                $allwords=array_merge($allwords,relativewords($word));
             else
-                $allwords=array_unique(array_merge($allwords,array($word)), SORT_REGULAR);
+                $allwords=array_merge($allwords,array($word));
         }
         $array=simplesearch($allwords);
         return $array;
