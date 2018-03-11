@@ -1,6 +1,7 @@
 <?php
 include 'invertedindex.php';
 if($_POST['parse']){getfiles();}
+
 function getfiles(){
 $dir = getcwd().'/source'.'/';
 $files = scandir($dir);
@@ -13,18 +14,18 @@ foreach ($files as $key => $value) {
 }
 if($cleanarray){
   $message = count($cleanarray);
-  echo "adding ".$message." documents";
+  //echo "adding ".$message." documents";
 buildInvertedIndex($cleanarray);
 
-
-$query = "SELECT documents.R_id, documents.name, documents.active FROM documents";
-$result = mysqli_query($dbc, $query);
-while($row = mysqli_fetch_array($result)){
+include 'connect.php';
+$query111 = "SELECT documents.R_id, documents.name, documents.active FROM documents";
+$result111= mysqli_query($dbc, $query111);
+while($row6 = mysqli_fetch_array($result111)){
   echo '<label class="checkbox-inline">';
-    if($row['active']==1){
-    echo'<input name="documents[]" type="checkbox" change="0" value="'.$row[R_id].' ">'.$row['name'];
+    if($row6['active']==1){
+    echo'<input name="documents[]" type="checkbox" change="0" value="'.$row6["R_id"].' ">'.$row6["name"];
   }else{
-    echo'<input name="documents[]" type="checkbox" checked="true" change="0" value="'.$row[R_id].'">'.$row['name'];
+    echo'<input name="documents[]" type="checkbox" checked="true" change="0" value="'.$row6["R_id"].'">'.$row6['name'];
   }
   echo'</label>';
 }
@@ -38,5 +39,5 @@ echo'<span id="message"></span>';
 }
 
 
-
+mysqli_close($dbc);
 ?>

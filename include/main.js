@@ -57,9 +57,14 @@ $(function(){
       data: dataString,
       cache:  false,
       success: function(data){
+        if(data == 'No documents To add'){
         $("#admin-tools> label").html(data).fadeOut(4000);
+      }else{
+        $("#hiding").html(data);
+      }
       }
     });
+    return false;
   });
 });
 
