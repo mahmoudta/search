@@ -1,5 +1,42 @@
 <?php
-    
+function check_qoutes_and_solve($copy){
+  $opensigns =array('(','[','{');
+  $closesigns = array(')',']','}');
+  $signs = array('+','-','*');
+  $start = array_search('(',$copy);
+  $end = array_search(')',$copy);
+  $solve = array_slice($copy,$start,$end,true);
+  $solve = array_slice($solve,1,$solve.lenght-1);
+  // $solve=implode("",$solve);
+$temp=[];
+/*solve all ands between the qoutes*/
+  for ($i=0; $i <count($solve); $i++) {
+    if($solve[$i]== '*' && $i-1>-1){
+      $first = explode(" ",$solve[$i-1]);
+      $second = explode(" ",$solve[$i+1]);
+      $temp = andfunc($first,$second);
+      // $solve=array_merge(array_slice($solve,0,$i-2,true),$temp,array_slice($solve,$i+2,conunt($solve),true));
+    }
+  }
+
+  /*solve all OR's between the qoutes*/
+    for ($i=0; $i <count($solve); $i++) {
+      if($solve[$i] == '+' && $i-1>-1){
+        $first = explode(" ",$solve[$i-1]);
+        $second = explode(" ",$solve[$i+1]);
+        $temp = orfunc($first,$second);
+
+
+        // $solve=array_merge(array_slice($solve,0,$i-2,true),$temp,array_slice($solve,$i+2,conunt($solve),true));
+        // $solve = array_merge(arr)
+      }
+    }
+    print_r($temp."<br>");
+    $newarray = array_merge(array_slice($copy,0,$start,true),$temp,array_slice($copy,$end+1,count($copy),true));
+    $copy = array_merge($newarray,array_slice($copy,$end+1,count($copy),true));
+    print_r ($copy);
+  return $copy;
+}
     function andfunc($arr1,$arr2){
         return array_intersect($arr1,$arr2);
     }
@@ -20,7 +57,7 @@
         }else{
             $empty=1;
         }
-        
+
         if($empty==0){
             $alldocs=[];
             $query1 = "SELECT postingfile.fileid
@@ -29,16 +66,16 @@
             $result1 = mysqli_query($dbc, $query1);
             while($row1 = mysqli_fetch_array($result1,MYSQLI_ASSOC)){
                 $alldocs[$row1['fileid']]=$row1['fileid'];
-                
+
             }
             $dbc->close();
-            
+
             return array_keys($alldocs);
         }else{
             $dbc->close();
             return [];
         }
-        
+
     }
     function alldoclist(){
         include 'connect.php';
@@ -51,7 +88,7 @@
         $dbc->close();
         return $totaldocs;
     }
-    
+
     function relativewords($word){
         include 'connect.php';
         $words=[];
@@ -64,7 +101,7 @@
         $dbc->close();
         return $words;
     }
-    
+
     function lookupWord($word,$searchin)
     {
         include 'connect.php';
@@ -78,7 +115,7 @@
         }else{
         $empty=1;
         }
-        
+
         $query = "SELECT COUNT(*) AS totaldocnumbers FROM documents";
         $result = mysqli_query($dbc, $query);
         $row = mysqli_fetch_array($result);
@@ -97,7 +134,7 @@
                 $idf=round(1 + log($totaldocnumbers/$docnumbers),9);
                 $finalresult[$row1['fileid']]=round($idf*$row1['tf'],9);
                 $alldocs[]=array('fileid'=>$row1['fileid'],'name'=>$row1['name'],'title'=>$row1['title'],'description'=>$row1['description']);
-                
+
                 }
             $dbc->close();
             $docs=[];
@@ -112,7 +149,7 @@
             return false;
         }
     }
-    
+
     function ranking($allresult,$alldocs,$wordsweight)
     {
 
@@ -129,7 +166,7 @@
                 $doccal+=round(pow($allresult[$word][$doc], 2),9);
             }
             $doccal=round(sqrt($doccal),9);
-            
+
             $rankedarray[$doc]=round($dot/($doccal*$query),9);
         }
         arsort($rankedarray);
@@ -137,7 +174,7 @@
     }
     function search($words,$searchin=0)
     {
-        
+
         $searchwords=[];
         $wordidf=[];
         $totalcount=0;
@@ -152,18 +189,18 @@
                 if (!empty($array[2])){
                     $allresult[$word]=$array[1];
                     $alldocs=array_unique(array_merge($alldocs,$array[2]), SORT_REGULAR);
-                    
+
                 }else
                     $allresult[$word]=[];
-                
-                
+
+
             }
             else
                 $searchwords[$word]++;
 
         }
 
-        
+
         $newalldocs=[];
         if(is_array($searchin)){
         foreach($alldocs as  $key=>$value ){
@@ -174,25 +211,25 @@
             foreach($alldocs as  $key=>$value )
             $newalldocs[$value['fileid']]=$value;
         }
-        
+
        // print_r ($newalldocs);
         //echo "<br><br>";
-        
+
 //           $searchin=andfunc(array_keys($newalldocs),$searchin);
-        
+
         foreach( $searchwords as $word=>$count)
             $wordsweight[$word]=round(($count/$totalcount)*$wordidf[$word],9);
-        
+
         //$allresult of each word with the file list and its weight
         //$alldocs list of all the used docs
         //$wordsweight the weight of each word in Query
-        
-        
+
+
         $ranked=ranking($allresult,array_keys($newalldocs),$wordsweight);
         $array=array(0=>$ranked,1=>$newalldocs);
         return $array;
     }
-    
+
     function  simplesearch($words){
         $data = file_get_contents('stoplist.txt');
         preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
@@ -204,22 +241,22 @@
             $lastchar=substr($word, -1,1);
             $firstchar=substr($word, 0,1);
             if((!in_array($word,$stoplist,TRUE))){
-                
+
                 if( (($firstchar=="'")&&($lastchar=="'")) ||(($firstchar=='"')&&($lastchar=='"')) ){
                     $word=substr($word, 1,strlen($word)-2);
                 }
-                
+
                 $newwordlist[]=$word;
-                
+
             }
-            
+
         }
-        
+
         $array=search($newwordlist);
         return $array;
     }
-    
-    
+
+
     function checker($totaldocs,$lastval,$laststr,$string,$nextstr){
         // ( ($lastval!=-1) || ($string!='-') )&&($nextstr!='-')
 //        if(1){
@@ -250,7 +287,7 @@
                         return call($totaldocs,stringfillter($string));
                     else if(!empty($lastval))
                     return $lastval;
-                    
+
                     //return call($totaldocs,stringfillter($string));
 //                    else if(empty($lastval))
 //                        return inwichfils($string);
@@ -266,9 +303,9 @@
 //
     }
     function stringfillter($string){
-        
+
     }
-    
+
     function call($totaldocs,$strings){
        $maxkey=count($strings)-1;
         $lastval=[];
@@ -296,16 +333,16 @@
         $allwords=[];
         foreach($matches as $match)
         $allwords=array_unique(array_merge($allwords,$match), SORT_REGULAR);
-        
+
         $totaldocs=alldoclist();
         $array=search($allwords,call($totaldocs,$strings));
         return $array;
-        
-        
+
+
     }
-    
+
    //print_r(advancedsearch(['act','*','kill','*','tree'],'act * kill * tree'));
-    
+
     function wildecard($words){
         $allwords=[];
         foreach($words as $word){

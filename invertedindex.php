@@ -18,7 +18,7 @@
             $filename = $newfile;
             $newfil = $main.'/'.$newfile;
             rename($oldfilename,$newfile);
-            
+
             //get title and description
             $start = strpos($data, '<p>');
             $end = strpos($data, '</p>', $start);
@@ -54,7 +54,7 @@
 
 
                 //echo $stoplist;
-                
+
                 $data=strip_tags($data);
                 preg_match_all('/(\w+)/', $data, $matches, PREG_SET_ORDER);
                 $wordcount[$Rid]=0;
@@ -70,7 +70,7 @@
                 }
             }
         }
-        
+
         foreach($invertedIndex as $word => $value)
         {
             mysqli_begin_Transaction($dbc);
@@ -84,7 +84,7 @@
             }else{
                 $dbc->rollback();
             }
-            
+
             $stmt = $dbc->prepare("SELECT `id` FROM `invertedindex` WHERE `word` = ?");
             $stmt->bind_param("s",$word);
             $stmt->execute();
@@ -92,7 +92,7 @@
             $stmt->fetch();
             $myrow = $result->fetch_assoc();
             $wordid=$myrow['id'];
-            
+
             $files=0;
             foreach($invertedIndex[$word] as $fileid => $value){
                 $files++;
@@ -116,9 +116,9 @@
             if($affected_rows == 1){
                 $dbc->commit();
                 // echo 'added with succses';
-                
+
             }else{
-                
+
                 echo 'Error Occurred0<br />';
                 echo mysqli_error();
             }
