@@ -162,12 +162,23 @@
                 $searchwords[$word]++;
 
         }
-        $newalldocs=[];
-        foreach($alldocs as  $key=>$value )
-        $newalldocs[$value['fileid']]=$value;
+
         
-        if(is_array($searchin))
-            andfunc($newalldocs,$searchin);
+        $newalldocs=[];
+        if(is_array($searchin)){
+        foreach($alldocs as  $key=>$value ){
+            if(!in_array($value['fileid'],$searchin,true))
+                $newalldocs[$value['fileid']]=$value;
+            }
+        }else{
+            foreach($alldocs as  $key=>$value )
+            $newalldocs[$value['fileid']]=$value;
+        }
+        
+       // print_r ($newalldocs);
+        //echo "<br><br>";
+        
+//           $searchin=andfunc(array_keys($newalldocs),$searchin);
         
         foreach( $searchwords as $word=>$count)
             $wordsweight[$word]=round(($count/$totalcount)*$wordidf[$word],9);
@@ -175,7 +186,8 @@
         //$allresult of each word with the file list and its weight
         //$alldocs list of all the used docs
         //$wordsweight the weight of each word in Query
-
+        
+        
         $ranked=ranking($allresult,array_keys($newalldocs),$wordsweight);
         $array=array(0=>$ranked,1=>$newalldocs);
         return $array;
@@ -285,7 +297,6 @@
         foreach($matches as $match)
         $allwords=array_unique(array_merge($allwords,$match), SORT_REGULAR);
         
-        echo "<br>";
         $totaldocs=alldoclist();
         $array=search($allwords,call($totaldocs,$strings));
         return $array;
@@ -293,7 +304,7 @@
         
     }
     
-    //print_r(advancedsearch(['act','+','hit','+','tree'],'act + hit + tree'));
+   //print_r(advancedsearch(['act','*','kill','*','tree'],'act * kill * tree'));
     
     function wildecard($words){
         $allwords=[];
