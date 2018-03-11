@@ -1,5 +1,14 @@
 <?php
     
+    function andfunc($arr1,$arr2){
+        return array_intersect($arr1,$arr2);
+    }
+    function orfunc($arr1,$arr2){
+        return array_unique(array_merge($arr1,$arr2), SORT_REGULAR);
+    }
+    function notfunc($totaldocs,$arr){
+        return array_diff($totaldocs,$arr);
+    }
     function inwichfils($word){
         include 'connect.php';
         $empty=0;
@@ -157,6 +166,9 @@
         foreach($alldocs as  $key=>$value )
         $newalldocs[$value['fileid']]=$value;
         
+        if(is_array($searchin))
+            andfunc($newalldocs,$searchin);
+        
         foreach( $searchwords as $word=>$count)
             $wordsweight[$word]=round(($count/$totalcount)*$wordidf[$word],9);
         
@@ -193,16 +205,6 @@
         
         $array=search($newwordlist);
         return $array;
-    }
-    
-    function andfunc($arr1,$arr2){
-        return array_intersect($arr1,$arr2);
-    }
-    function orfunc($arr1,$arr2){
-        return array_unique(array_merge($arr1,$arr2), SORT_REGULAR);
-    }
-    function notfunc($totaldocs,$arr){
-        return array_diff($totaldocs,$arr);
     }
     
     
@@ -278,13 +280,20 @@
     }
     function advancedsearch($strings,$long){
         //print_r ($strings);
+        preg_match_all('/(\w+)/', $long, $matches, PREG_SET_ORDER);
+        $allwords=[];
+        foreach($matches as $match)
+        $allwords=array_unique(array_merge($allwords,$match), SORT_REGULAR);
+        
         echo "<br>";
         $totaldocs=alldoclist();
-        call($totaldocs,$strings);
+        $array=search($allwords,call($totaldocs,$strings));
+        return $array;
+        
         
     }
     
-    advancedsearch(['act','+','hit','+','tree'],'act + hit + tree');
+    //print_r(advancedsearch(['act','+','hit','+','tree'],'act + hit + tree'));
     
     function wildecard($words){
         $allwords=[];
