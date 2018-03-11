@@ -93,7 +93,7 @@ if(!empty($_POST["username"])){
 </header>
 <body>
 <div class="col-xs-12 col-md-8 col-md-offset-2" id="advanced_tools">
-  <form class="form form-inline" action="">
+  <form class="form form-inline" action="" method="post" id="advancedsearch">
     <div class="form-group col-xs-12">
       <label class="col-xs-3" for="operand">OPERANDS SEARCH:</label>
       <input type="text" class="form-control col-xs-6" id="operand" name="operand" placeholder=" ( term And term ) OR term">
@@ -113,7 +113,6 @@ if(!empty($_POST["username"])){
   <div class="container" id="result">
 
   </div>
-
 
 
 
