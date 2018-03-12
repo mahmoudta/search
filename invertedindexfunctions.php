@@ -7,6 +7,8 @@ function check_qoutes_and_solve($copy){
   $end = array_search(')',$copy);
   $solve = array_slice($copy,$start,$end,true);
   $solve = array_slice($solve,1,$solve.lenght-1);
+  if(empty($solve))
+    return $copy;
   // $solve=implode("",$solve);
 $temp=[];
 /*solve all ands between the qoutes*/
@@ -25,19 +27,103 @@ $temp=[];
         $first = explode(" ",$solve[$i-1]);
         $second = explode(" ",$solve[$i+1]);
         $temp = orfunc($first,$second);
-
-
-        // $solve=array_merge(array_slice($solve,0,$i-2,true),$temp,array_slice($solve,$i+2,conunt($solve),true));
+        $temp=implode(" ",$temp);
+        $temp = explode(",",$temp);
+               // $solve=array_merge(array_slice($solve,0,$i-2,true),$temp,array_slice($solve,$i+2,conunt($solve),true));
         // $solve = array_merge(arr)
       }
     }
-    print_r($temp);
-    echo "<br>";
     $newarray = array_merge(array_slice($copy,0,$start,true),$temp);
     $copy = array_merge($newarray,array_slice($copy,$end+1,count($copy),true));
-    print_r ($copy);
+    // print_r ($copy);
   return $copy;
 }
+
+function final_step_cal($copy){
+  $answer = $copy;
+  // print_r($answer);
+  for ($i=0; $i <count($answer); $i++) {
+    if($answer[$i]== '*' && $i-1>-1){
+      $first = explode(" ",$answer[$i-1]);
+      $second = explode(" ",$answer[$i+1]);
+      $temp = andfunc($first,$second);
+      $temp=implode(" ",$temp);
+      $temp = explode(",",$temp);
+      if(count($answer)>3){
+        if($i != 1){
+        $newanswer=array_merge(array_slice($answer,0,$i-1,true),$temp);
+        $answer=array_merge($newanswer,array_slice($answer,$i+2,count($answer),true));
+      }else{
+        $answer=array_merge($temp,array_slice($answer,3,count($answer),true));
+      }
+      }else{
+        $temp=implode(" ",$temp);
+        $temp = explode(" ",$temp);
+        return $temp;
+      }
+    }
+  }
+
+
+
+  for ($i=0; $i <count($answer); $i++) {
+    if($answer[$i]== '+' && $i-1>-1){
+      $first = explode(" ",$answer[$i-1]);
+      $second = explode(" ",$answer[$i+1]);
+      $temp = orfunc($first,$second);
+      $temp=implode(" ",$temp);
+      $temp = explode(",",$temp);
+      if(count($answer)>3){
+        if($i != 1){
+        $newanswer=array_merge(array_slice($answer,0,$i-1,true),$temp);
+        $answer=array_merge($newanswer,array_slice($answer,$i+2,count($answer),true));
+      }else{
+        $answer=array_merge($temp,array_slice($answer,3,count($answer),true));
+      }
+      }else{
+        $temp=implode(" ",$temp);
+        $temp = explode(" ",$temp);
+        return $temp;
+      }
+    }
+  }
+
+  for ($i=0; $i <count($answer); $i++) {
+    if($answer[$i]== '-' && $i-1>-1){
+
+      $first = explode(" ",$answer[$i-1]);
+      $second = explode(" ",$answer[$i+1]);
+      $temp = notfunc($first,$second);
+    }else{
+        $all = alldoclist();
+        $second = explode(" ",$answer[$i+1]);
+        $temp = notfunc($all,$second);
+    }
+
+             $temp=implode(" ",$temp);
+             $temp = explode(",",$temp);
+             if(count($answer)>3){
+               if($i != 1){
+               $newanswer=array_merge(array_slice($answer,0,$i-1,true),$temp);
+               $answer=array_merge($newanswer,array_slice($answer,$i+2,count($answer),true));
+             }else{
+               $answer=array_merge($temp,array_slice($answer,3,count($answer),true));
+             }
+             }else{
+               $temp=implode(" ",$temp);
+               $temp = explode(" ",$temp);
+               return $temp;
+             }
+  }
+
+
+
+
+}
+
+
+
+
 
     function andfunc($arr1,$arr2){
         return array_intersect($arr1,$arr2);

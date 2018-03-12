@@ -168,7 +168,7 @@ $(function(){
     $.ajax({
       type: "POST",
       url:  "actionSearch.php",
-      data: {advancedsearch:expression,send},
+      data: {advancedsearch:send},
       cache:  true,
       success: function(data){
         $("#result").html(data);
